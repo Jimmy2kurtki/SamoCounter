@@ -23,6 +23,9 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private int intTextViewEasy, intTextViewNorm, intTextViewHard;
     private ArrayList<String> arrayListSim = new ArrayList<>();
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -47,10 +51,19 @@ public class MainActivity extends AppCompatActivity {
         buttonNorm = findViewById(R.id.button_norm);
         buttonHard = findViewById(R.id.button_hard);
         listView = findViewById(R.id.listView);
+        getData();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,arrayListSim);
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,reversedArrayListSim());
         listView.setAdapter(adapter);
 
+    }
+
+    public ArrayList<String>  reversedArrayListSim(){
+        ArrayList<String> reversedArrayListSim = new ArrayList<>(arrayListSim);
+        Collections.reverse(reversedArrayListSim);
+        return reversedArrayListSim;
     }
 
     public void setCountSim(Button btn) {
@@ -117,8 +130,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void getData(View view){
+    public void getData(){
         try {
+            FileOutputStream fileOutput = openFileOutput("user_data.txt",MODE_APPEND);
+            fileOutput.close();
             FileInputStream fileInput = openFileInput("user_data.txt");
             InputStreamReader reader = new InputStreamReader(fileInput);
             BufferedReader bufferedReader = new BufferedReader(reader);
@@ -128,11 +143,17 @@ public class MainActivity extends AppCompatActivity {
             while ((lines = bufferedReader.readLine()) != null){
                 stringBuilder.append(lines).append("\n");
             }
+            String string = stringBuilder.toString();
+            if (string.isEmpty()) {
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            } else {
+                String[] arr = string.split("\n");
+                Collections.addAll(arrayListSim,arr);
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 }
