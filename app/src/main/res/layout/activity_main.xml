@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/whooshColor1_orange">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="407dp"
+        android:layout_height="135dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/button_easy"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/audiowide"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:onClick="clickOnButton"
+            android:text="@string/easy"
+            android:textColor="@color/whooshColor4_grey"
+            android:textSize="24sp"
+            app:cornerRadius="15dp" />
+
+        <Button
+            android:id="@+id/button_norm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/whooshColor3_red"
+            android:fontFamily="@font/audiowide"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:onClick="clickOnButton"
+            android:text="@string/middle"
+            android:textColor="@color/whooshColor4_grey"
+            android:textSize="24sp"
+            app:cornerRadius="15dp" />
+
+        <Button
+            android:id="@+id/button_hard"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/whooshColor4_grey"
+            android:fontFamily="@font/audiowide"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:onClick="clickOnButton"
+            android:text="@string/hard"
+            android:textSize="24sp"
+            app:cornerRadius="15dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_easy"
+        android:layout_width="135dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/audiowide"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor2_white"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="34" />
+
+    <TextView
+        android:id="@+id/textView_norm"
+        android:layout_width="135dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/audiowide"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor3_red"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/textView_hard"
+        app:layout_constraintStart_toEndOf="@+id/textView_easy"
+        tools:text="12" />
+
+    <TextView
+        android:id="@+id/textView_hard"
+        android:layout_width="135dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/audiowide"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor4_grey"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="5" />
+
+    <TextView
+        android:id="@+id/textView_sumSim"
+        android:layout_width="182dp"
+        android:layout_height="98dp"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/audiowide"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor4_grey"
+        android:textSize="96sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="51" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="409dp"
+        android:layout_height="366dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_norm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_sumSim" />
+</androidx.constraintlayout.widget.ConstraintLayout>

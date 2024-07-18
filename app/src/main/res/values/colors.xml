@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="whooshColor1_orange">#feb827</color>
+    <color name="whooshColor2_white">#fefefe</color>
+    <color name="whooshColor3_red">#fe6d2b</color>
+    <color name="whooshColor4_grey">#505963</color>
+    <color name="sb">#D18B00</color>
+</resources>
