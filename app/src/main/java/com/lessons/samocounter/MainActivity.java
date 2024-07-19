@@ -24,8 +24,7 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
@@ -126,8 +125,6 @@ public class MainActivity extends AppCompatActivity {
             FileOutputStream fileOutput = openFileOutput("user_data.txt",MODE_APPEND);
             fileOutput.write((numberSim + " " + dateText + "\n").getBytes());
             fileOutput.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -172,8 +169,6 @@ public class MainActivity extends AppCompatActivity {
             FileOutputStream fileOutput = openFileOutput("countSim.txt",MODE_PRIVATE);
             fileOutput.write((allCountForTxt).getBytes());
             fileOutput.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -190,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             BufferedReader bufferedReader = new BufferedReader(reader);
 
             StringBuilder stringBuilder = new StringBuilder();
-            String lines = "";
+            String lines;
             while ((lines = bufferedReader.readLine()) != null){
                 stringBuilder.append(lines).append(" ");
             }
