@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -33,8 +34,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewEasy,textViewNorm,textViewHard,textViewSumSim;
     private Button buttonEasy,buttonNorm,buttonHard;
     private ListView listView;
-    private int intTextViewEasy, intTextViewNorm, intTextViewHard;
+    private int intTextViewEasy = 0, intTextViewNorm = 0, intTextViewHard = 0;
     private ArrayList<String> arrayListSim = new ArrayList<>();
+    private ArrayList<String> reversedArrayListSim = new ArrayList<>();
+    Date currentDate = new Date();
+    DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+    String dateText = dateFormat.format(currentDate);
 
 
 
@@ -52,21 +57,18 @@ public class MainActivity extends AppCompatActivity {
         buttonHard = findViewById(R.id.button_hard);
         listView = findViewById(R.id.listView);
         getData();
+        getCountSim();
+        getListViev();
 
 
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,reversedArrayListSim());
+    }
+    public void getListViev() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.design_list,R.id.number_Sim,reversedArrayListSim);
         listView.setAdapter(adapter);
-
     }
 
-    public ArrayList<String>  reversedArrayListSim(){
-        ArrayList<String> reversedArrayListSim = new ArrayList<>(arrayListSim);
-        Collections.reverse(reversedArrayListSim);
-        return reversedArrayListSim;
-    }
 
-    public void setCountSim(Button btn) {
+    public void setCountSim(@NonNull Button btn) {
         if (btn.equals(buttonEasy)) {
             intTextViewEasy++;
             textViewEasy.setText(String.valueOf(intTextViewEasy));
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             textViewHard.setText(String.valueOf(intTextViewHard));
         }
         textViewSumSim.setText(String.valueOf(intTextViewEasy+intTextViewNorm+intTextViewHard));
+        saveCountSim();
     }
 
     public void clickOnButton(View v) {
@@ -97,10 +100,15 @@ public class MainActivity extends AppCompatActivity {
                 String numberSim = editTextUserNumber.getText().toString();
                 numberSim.replaceAll("\\s+","");
                 if (numberSim.isEmpty()) {
-                    numberSim = "-----";
+                    numberSim = "- " + dateText;
                 }
                 setCountSim(btn);
-                arrayListSim.add(numberSim);
+                arrayListSim.add(numberSim + " " + dateText);
+                reversedArrayListSim.clear();
+                reversedArrayListSim.addAll(arrayListSim);
+                Collections.reverse(reversedArrayListSim);
+                getListViev();
+
                 saveData(numberSim);
             }
         }).setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -115,10 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void saveData(String numberSim){
         try {
-            Date currentDate = new Date();
-            DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-            String dateText = dateFormat.format(currentDate);
-
             FileOutputStream fileOutput = openFileOutput("user_data.txt",MODE_APPEND);
             fileOutput.write((numberSim + " " + dateText + "\n").getBytes());
             fileOutput.close();
@@ -149,8 +153,62 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 String[] arr = string.split("\n");
                 Collections.addAll(arrayListSim,arr);
+                reversedArrayListSim.clear();
+                reversedArrayListSim.addAll(arrayListSim);
+                Collections.reverse(reversedArrayListSim);
+                getListViev();
             }
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void saveCountSim(){
+        String allCountForTxt = (intTextViewEasy + " " + intTextViewNorm + " " + intTextViewHard + " " + dateText);
+
+        try {
+            FileOutputStream fileOutput = openFileOutput("countSim.txt",MODE_PRIVATE);
+            fileOutput.write((allCountForTxt).getBytes());
+            fileOutput.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    public void getCountSim(){
+        try {
+            FileOutputStream fileOutput = openFileOutput("countSim.txt",MODE_APPEND);
+            fileOutput.close();
+            FileInputStream fileInput = openFileInput("countSim.txt");
+            InputStreamReader reader = new InputStreamReader(fileInput);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+
+            StringBuilder stringBuilder = new StringBuilder();
+            String lines = "";
+            while ((lines = bufferedReader.readLine()) != null){
+                stringBuilder.append(lines).append(" ");
+            }
+            String string = stringBuilder.toString();
+            if (string.isEmpty()) {
+
+            } else {
+                String[] arr = string.split(" ");
+                if (arr[3].equals(dateText)) {
+                    intTextViewEasy = Integer.parseInt(arr[0]);
+                    intTextViewNorm = Integer.parseInt(arr[1]);
+                    intTextViewHard = Integer.parseInt(arr[2]);
+                    textViewSumSim.setText(String.valueOf(intTextViewEasy+intTextViewNorm+intTextViewHard));
+                    textViewEasy.setText(String.valueOf(intTextViewEasy));
+                    textViewNorm.setText(String.valueOf(intTextViewNorm));
+                    textViewHard.setText(String.valueOf(intTextViewHard));
+                }
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
