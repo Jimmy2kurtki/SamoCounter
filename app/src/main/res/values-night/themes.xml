@@ -5,5 +5,5 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="android:statusBarColor">@color/sb</item>
     </style>
-    <style name="Theme.SamoCounter" parent="Base.Theme.SamoCounter" />
+
 </resources>
