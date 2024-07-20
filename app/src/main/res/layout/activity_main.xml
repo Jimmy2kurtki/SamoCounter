@@ -135,7 +135,7 @@
 
     <TextView
         android:id="@+id/money"
-        android:layout_width="190dp"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:fontFamily="@font/audiowide"
         android:textAlignment="center"
@@ -143,30 +143,44 @@
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/listView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textView_sumSim"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox"
         tools:text="2264" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="125dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="71dp"
-        android:layout_marginTop="16dp"
-        android:buttonTint="@color/whooshColor4_grey"
+    <Switch
+        android:id="@+id/switch_weekend"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="40dp"
         android:fontFamily="@font/audiowide"
-        android:shadowColor="@color/whooshColor4_grey"
-        android:text="weekend"
         android:textColor="@color/whooshColor4_grey"
-        android:textColorHighlight="@color/whooshColor4_grey"
-        android:textColorHint="@color/whooshColor4_grey"
-        android:textColorLink="@color/whooshColor4_grey"
-        android:textSize="18sp"
+        android:textStyle="bold"
+        android:thumb="@android:drawable/ic_menu_send"
+        android:thumbTint="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/money"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView_sumSim"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginBottom="7dp"
+        android:fontFamily="@font/audiowide"
+        android:text="WEEKEND"
+        android:textColor="@color/whooshColor4_grey"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/money"
+        app:layout_constraintEnd_toStartOf="@+id/switch_weekend"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView_sumSim"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

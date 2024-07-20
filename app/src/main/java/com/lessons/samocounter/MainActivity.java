@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     String timeText = timeFormat.format(currentDate);
     int intTimeText;
     ArrayAdapter<String> adapter ;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    Switch switchWeekend;
+    boolean bolleanSwitch;
 
 
 
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         buttonEasy = findViewById(R.id.button_easy);
         buttonNorm = findViewById(R.id.button_norm);
         listView = findViewById(R.id.listView);
+        switchWeekend = findViewById(R.id.switch_weekend);
         adapter = new ArrayAdapter<>(this, R.layout.design_list,R.id.number_Sim, arrayListSim);
         intTimeText = Integer.parseInt(timeText.replaceAll(":",""));
         getData();
@@ -66,7 +72,13 @@ public class MainActivity extends AppCompatActivity {
         getCountSim();
         getListViev();
 
-
+        switchWeekend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                money(intTextViewSumSim, b);
+                bolleanSwitch = b;
+            }
+        });
     }
 
     public void getListViev() {
@@ -100,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
                         });
                 AlertDialog dialogDelete = builder.create();
                 dialogDelete.show();
-
             }
         })
     ;}
@@ -121,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 textViewHard.setText(String.valueOf(intTextViewHard));
             }
             intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-            money(intTextViewSumSim);
+            money(intTextViewSumSim,bolleanSwitch);
             textViewSumSim.setText(String.valueOf(intTextViewSumSim));
 
             saveCountSim();
@@ -154,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             textViewHard.setText(String.valueOf(intTextViewHard));
         }
         intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-        money(intTextViewSumSim);
+        money(intTextViewSumSim,bolleanSwitch);
         textViewSumSim.setText(String.valueOf(intTextViewSumSim));
         saveCountSim();
     }
@@ -204,8 +215,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }).show();
-
-
     }
 
     public void saveData(String numberSim,String strBtn){
@@ -216,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void getData(){
@@ -240,11 +248,9 @@ public class MainActivity extends AppCompatActivity {
                 Collections.addAll(arrayListSim,arr);
                 getListViev();
             }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void saveCountSim(){
@@ -257,8 +263,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     public void getCountSim(){
@@ -284,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                     intTextViewNorm = Integer.parseInt(arr[1]);
                     intTextViewHard = Integer.parseInt(arr[2]);
                     intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-                    money(intTextViewSumSim);
+                    money(intTextViewSumSim,bolleanSwitch);
                     textViewSumSim.setText(String.valueOf(intTextViewSumSim));
 
                     textViewEasy.setText(String.valueOf(intTextViewEasy));
@@ -295,18 +299,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    public void money(int intTextViewSumSim){
+    public void money(int intTextViewSumSim, boolean b){
         if (intTextViewSumSim <= 23) {
             intMoney = intTextViewSumSim * 146;
-        } else if (intTextViewSumSim <= 28 && (intTimeText > 1925 || intTimeText < 600)){
-            intMoney = ((intTextViewSumSim - 23) * 190) + (23 * 146);
-        } else if (intTextViewSumSim <= 33 && (intTimeText > 1925 || intTimeText < 600)){
-            intMoney = (5 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 5) * 210);
-        } else if (intTextViewSumSim > 33 && (intTimeText > 1925 || intTimeText < 600)) {
-            intMoney = (5 * 210) + (5 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 5 - 5) * 230);
         } else if (intTextViewSumSim <= 30) {
             intMoney = ((intTextViewSumSim - 23) * 190) + (23 * 146);
         } else if (intTextViewSumSim <= 33) {
@@ -314,7 +311,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             intMoney = (3 * 210) + (7 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 7 - 3) * 230);
         }
-
+        if (b){
+            intMoney = (int) (intMoney * 1.3);
+        }
         money.setText(String.valueOf(intMoney));
     }
 }
