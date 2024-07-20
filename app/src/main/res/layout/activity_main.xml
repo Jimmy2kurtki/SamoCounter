@@ -109,13 +109,13 @@
         android:id="@+id/textView_sumSim"
         android:layout_width="182dp"
         android:layout_height="98dp"
-        android:layout_marginTop="2dp"
         android:fontFamily="@font/audiowide"
         android:textAlignment="center"
         android:textColor="@color/whooshColor4_grey"
         android:textSize="96sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="51" />
@@ -132,6 +132,41 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_sumSim" />
+
+    <TextView
+        android:id="@+id/money"
+        android:layout_width="190dp"
+        android:layout_height="48dp"
+        android:fontFamily="@font/audiowide"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor4_grey"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/listView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView_sumSim"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox"
+        tools:text="2264" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="125dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="71dp"
+        android:layout_marginTop="16dp"
+        android:buttonTint="@color/whooshColor4_grey"
+        android:fontFamily="@font/audiowide"
+        android:shadowColor="@color/whooshColor4_grey"
+        android:text="weekend"
+        android:textColor="@color/whooshColor4_grey"
+        android:textColorHighlight="@color/whooshColor4_grey"
+        android:textColorHint="@color/whooshColor4_grey"
+        android:textColorLink="@color/whooshColor4_grey"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView_sumSim"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

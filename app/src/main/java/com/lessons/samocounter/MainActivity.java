@@ -30,15 +30,19 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView textViewEasy,textViewNorm,textViewHard,textViewSumSim;
+    private TextView textViewEasy,textViewNorm,textViewHard,textViewSumSim, money;
     private Button buttonEasy,buttonNorm;
     private ListView listView;
-    private int intTextViewEasy = 0, intTextViewNorm = 0, intTextViewHard = 0;
+    private int intTextViewEasy = 0, intTextViewNorm = 0, intTextViewHard = 0, intTextViewSumSim, intMoney;
     private ArrayList<String> arrayListSim = new ArrayList<>();
     Date currentDate = new Date();
     DateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
     String dateText = dateFormat.format(currentDate);
+    DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    String timeText = timeFormat.format(currentDate);
+    int intTimeText;
     ArrayAdapter<String> adapter ;
+
 
 
 
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        money = findViewById(R.id.money);
         textViewEasy = findViewById(R.id.textView_easy);
         textViewNorm = findViewById(R.id.textView_norm);
         textViewHard = findViewById(R.id.textView_hard);
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         buttonNorm = findViewById(R.id.button_norm);
         listView = findViewById(R.id.listView);
         adapter = new ArrayAdapter<>(this, R.layout.design_list,R.id.number_Sim, arrayListSim);
+        intTimeText = Integer.parseInt(timeText.replaceAll(":",""));
         getData();
         Collections.reverse(arrayListSim);
         getCountSim();
@@ -114,7 +120,10 @@ public class MainActivity extends AppCompatActivity {
                 intTextViewHard--;
                 textViewHard.setText(String.valueOf(intTextViewHard));
             }
-            textViewSumSim.setText(String.valueOf(intTextViewEasy + intTextViewNorm + intTextViewHard));
+            intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
+            money(intTextViewSumSim);
+            textViewSumSim.setText(String.valueOf(intTextViewSumSim));
+
             saveCountSim();
         }
 
@@ -144,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
             intTextViewHard++;
             textViewHard.setText(String.valueOf(intTextViewHard));
         }
-        textViewSumSim.setText(String.valueOf(intTextViewEasy+intTextViewNorm+intTextViewHard));
+        intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
+        money(intTextViewSumSim);
+        textViewSumSim.setText(String.valueOf(intTextViewSumSim));
         saveCountSim();
     }
 
@@ -272,7 +283,10 @@ public class MainActivity extends AppCompatActivity {
                     intTextViewEasy = Integer.parseInt(arr[0]);
                     intTextViewNorm = Integer.parseInt(arr[1]);
                     intTextViewHard = Integer.parseInt(arr[2]);
-                    textViewSumSim.setText(String.valueOf(intTextViewEasy+intTextViewNorm+intTextViewHard));
+                    intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
+                    money(intTextViewSumSim);
+                    textViewSumSim.setText(String.valueOf(intTextViewSumSim));
+
                     textViewEasy.setText(String.valueOf(intTextViewEasy));
                     textViewNorm.setText(String.valueOf(intTextViewNorm));
                     textViewHard.setText(String.valueOf(intTextViewHard));
@@ -282,5 +296,25 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void money(int intTextViewSumSim){
+        if (intTextViewSumSim <= 23) {
+            intMoney = intTextViewSumSim * 146;
+        } else if (intTextViewSumSim <= 28 && (intTimeText > 1925 || intTimeText < 600)){
+            intMoney = ((intTextViewSumSim - 23) * 190) + (23 * 146);
+        } else if (intTextViewSumSim <= 33 && (intTimeText > 1925 || intTimeText < 600)){
+            intMoney = (5 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 5) * 210);
+        } else if (intTextViewSumSim > 33 && (intTimeText > 1925 || intTimeText < 600)) {
+            intMoney = (5 * 210) + (5 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 5 - 5) * 230);
+        } else if (intTextViewSumSim <= 30) {
+            intMoney = ((intTextViewSumSim - 23) * 190) + (23 * 146);
+        } else if (intTextViewSumSim <= 33) {
+            intMoney = (7 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 7) * 210);
+        } else {
+            intMoney = (3 * 210) + (7 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 7 - 3) * 230);
+        }
+
+        money.setText(String.valueOf(intMoney));
     }
 }
