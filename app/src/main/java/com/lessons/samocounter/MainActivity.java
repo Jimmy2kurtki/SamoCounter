@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +18,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,14 +31,14 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private TextView textViewEasy,textViewNorm,textViewHard,textViewSumSim;
-    private Button buttonEasy,buttonNorm,buttonHard;
+    private Button buttonEasy,buttonNorm;
     private ListView listView;
     private int intTextViewEasy = 0, intTextViewNorm = 0, intTextViewHard = 0;
     private ArrayList<String> arrayListSim = new ArrayList<>();
-    private ArrayList<String> reversedArrayListSim = new ArrayList<>();
     Date currentDate = new Date();
-    DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+    DateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
     String dateText = dateFormat.format(currentDate);
+    ArrayAdapter<String> adapter ;
 
 
 
@@ -53,17 +53,83 @@ public class MainActivity extends AppCompatActivity {
         textViewSumSim = findViewById(R.id.textView_sumSim);
         buttonEasy = findViewById(R.id.button_easy);
         buttonNorm = findViewById(R.id.button_norm);
-        buttonHard = findViewById(R.id.button_hard);
         listView = findViewById(R.id.listView);
+        adapter = new ArrayAdapter<>(this, R.layout.design_list,R.id.number_Sim, arrayListSim);
         getData();
+        Collections.reverse(arrayListSim);
         getCountSim();
         getListViev();
 
 
     }
+
     public void getListViev() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.design_list,R.id.number_Sim,reversedArrayListSim);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.design_list,R.id.number_Sim, arrayListSim);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_delete,null);
+                String removeString = arrayListSim.get(position);
+                String removeString1 = removeString.replaceAll("EASY", "");
+                removeString1 = removeString1.replaceAll("NORM","");
+                removeString1 = removeString1.replaceAll("HARD","");
+                removeString1 = removeString1.replaceAll(dateText,"");
+                builder.setMessage(removeString1)
+                        .setView(cl)
+                        .setCancelable(true)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                removeSim(removeString,position);
+                                adapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNeutralButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                AlertDialog dialogDelete = builder.create();
+                dialogDelete.show();
+
+            }
+        })
+    ;}
+    public void removeSim(String removeString, int i){
+        arrayListSim.remove(i);
+        boolean indexEasy = removeString.contains("EASY");
+        boolean indexNorm = removeString.contains("NORM");
+        boolean indexData = removeString.contains(dateText);
+        if (indexData) {
+            if (indexEasy) {
+                intTextViewEasy--;
+                textViewEasy.setText(String.valueOf(intTextViewEasy));
+            } else if (indexNorm) {
+                intTextViewNorm--;
+                textViewNorm.setText(String.valueOf(intTextViewNorm));
+            } else {
+                intTextViewHard--;
+                textViewHard.setText(String.valueOf(intTextViewHard));
+            }
+            textViewSumSim.setText(String.valueOf(intTextViewEasy + intTextViewNorm + intTextViewHard));
+            saveCountSim();
+        }
+
+        try {
+            FileOutputStream fileOutput = openFileOutput("user_data.txt", MODE_PRIVATE);
+            fileOutput.close();
+            fileOutput = openFileOutput("user_data.txt", MODE_APPEND);
+            for (int j = 0; j < arrayListSim.size(); j++) {
+                String string = arrayListSim.get(j);
+                fileOutput.write((string + "\n").getBytes());
+            }
+            fileOutput.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -97,18 +163,29 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog alertDialog = (AlertDialog) dialogInterface;
                 EditText editTextUserNumber = alertDialog.findViewById(R.id.editText_user_number);
                 String numberSim = editTextUserNumber.getText().toString();
-                numberSim.replaceAll("\\s+","");
+                numberSim = numberSim.toUpperCase();
+                numberSim = numberSim.replaceAll("\\s+","");
+                numberSim = numberSim.replaceAll("EASY", "");
+                numberSim = numberSim.replaceAll("NORM","");
+                numberSim = numberSim.replaceAll("HARD","");
+                numberSim = numberSim.replaceAll(dateText,"");
                 if (numberSim.isEmpty()) {
-                    numberSim = "- " + dateText;
+                    numberSim = "----- ";
                 }
+                String strBtn = "";
+                if(btn.equals(buttonEasy)){
+                    strBtn = "EASY     ";
+                }else if(btn.equals(buttonNorm)){
+                    strBtn = "NORM     ";
+                }else{
+                    strBtn = "HARD     ";
+                }
+
                 setCountSim(btn);
-                arrayListSim.add(numberSim + " " + dateText);
-                reversedArrayListSim.clear();
-                reversedArrayListSim.addAll(arrayListSim);
-                Collections.reverse(reversedArrayListSim);
+                arrayListSim.add(0,numberSim + "     "  + strBtn +  dateText);
                 getListViev();
 
-                saveData(numberSim);
+                saveData(numberSim,strBtn);
             }
         }).setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
@@ -120,10 +197,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void saveData(String numberSim){
+    public void saveData(String numberSim,String strBtn){
         try {
             FileOutputStream fileOutput = openFileOutput("user_data.txt",MODE_APPEND);
-            fileOutput.write((numberSim + " " + dateText + "\n").getBytes());
+            fileOutput.write((numberSim + "     " + strBtn +  dateText + "\n").getBytes());
             fileOutput.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -150,9 +227,6 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 String[] arr = string.split("\n");
                 Collections.addAll(arrayListSim,arr);
-                reversedArrayListSim.clear();
-                reversedArrayListSim.addAll(arrayListSim);
-                Collections.reverse(reversedArrayListSim);
                 getListViev();
             }
 
