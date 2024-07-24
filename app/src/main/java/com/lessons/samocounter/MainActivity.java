@@ -1,7 +1,10 @@
 package com.lessons.samocounter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,11 +32,13 @@ import java.util.ArrayList;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView textViewEasy,textViewNorm,textViewHard,textViewSumSim, money;
-    private Button buttonEasy,buttonNorm;
+    private TextView textViewEasy, textViewNorm, textViewHard, textViewSumSim, money;
+    private Button buttonEasy, buttonNorm;
     private ListView listView;
     private int intTextViewEasy = 0, intTextViewNorm = 0, intTextViewHard = 0, intTextViewSumSim, intMoney;
     private ArrayList<String> arrayListSim = new ArrayList<>();
@@ -43,11 +48,12 @@ public class MainActivity extends AppCompatActivity {
     DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
     String timeText = timeFormat.format(currentDate);
     int intTimeText;
-    ArrayAdapter<String> adapter ;
+    ArrayAdapter<String> adapter;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch switchWeekend;
-    boolean bolleanSwitch;
-
+    boolean switchState;
+    String moneyOnDay;
+    ArrayList<String> setMoneyOnDay = new ArrayList<>();
 
 
 
@@ -65,42 +71,61 @@ public class MainActivity extends AppCompatActivity {
         buttonNorm = findViewById(R.id.button_norm);
         listView = findViewById(R.id.listView);
         switchWeekend = findViewById(R.id.switch_weekend);
-        adapter = new ArrayAdapter<>(this, R.layout.design_list,R.id.number_Sim, arrayListSim);
-        intTimeText = Integer.parseInt(timeText.replaceAll(":",""));
+        adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
+        intTimeText = Integer.parseInt(timeText.replaceAll(":", ""));
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("test", Context.MODE_PRIVATE);
+        switchState = sharedPreferences.getBoolean("switchState", true);
+        moneyOnDay = sharedPreferences.getString("moneyOnDay", "0");
+        switchWeekend.setChecked(switchState);
+
         getData();
-        Collections.reverse(arrayListSim);
+
         getCountSim();
         getListViev();
+
+        checkAtDay();
 
         switchWeekend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 money(intTextViewSumSim, b);
-                bolleanSwitch = b;
+                switchState = b;
+            }
+        });
+
+        money.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                savePreferences();
+
+                Intent intent = new Intent(MainActivity.this, MoneyOnDayActivity.class);
+                startActivity(intent);
             }
         });
     }
 
     public void getListViev() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.design_list,R.id.number_Sim, arrayListSim);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_delete,null);
+                ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_delete, null);
                 String removeString = arrayListSim.get(position);
                 String removeString1 = removeString.replaceAll("EASY", "");
-                removeString1 = removeString1.replaceAll("NORM","");
-                removeString1 = removeString1.replaceAll("HARD","");
-                removeString1 = removeString1.replaceAll(dateText,"");
+                removeString1 = removeString1.replaceAll("NORM", "");
+                removeString1 = removeString1.replaceAll("HARD", "");
+                removeString1 = removeString1.replaceAll(dateText, "");
                 builder.setMessage(removeString1)
                         .setView(cl)
                         .setCancelable(true)
                         .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                removeSim(removeString,position);
+                                removeSim(removeString, position);
                                 adapter.notifyDataSetChanged();
                             }
                         })
@@ -114,8 +139,10 @@ public class MainActivity extends AppCompatActivity {
                 dialogDelete.show();
             }
         })
-    ;}
-    public void removeSim(String removeString, int i){
+        ;
+    }
+
+    public void removeSim(String removeString, int i) {
         arrayListSim.remove(i);
         boolean indexEasy = removeString.contains("EASY");
         boolean indexNorm = removeString.contains("NORM");
@@ -132,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 textViewHard.setText(String.valueOf(intTextViewHard));
             }
             intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-            money(intTextViewSumSim,bolleanSwitch);
+            money(intTextViewSumSim, switchState);
             textViewSumSim.setText(String.valueOf(intTextViewSumSim));
 
             saveCountSim();
@@ -165,18 +192,18 @@ public class MainActivity extends AppCompatActivity {
             textViewHard.setText(String.valueOf(intTextViewHard));
         }
         intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-        money(intTextViewSumSim,bolleanSwitch);
+        money(intTextViewSumSim, switchState);
         textViewSumSim.setText(String.valueOf(intTextViewSumSim));
         saveCountSim();
     }
 
     public void clickOnButton(View v) {
-            customDialog((Button)v);
+        customDialog((Button) v);
     }
 
-    private void customDialog(Button btn){
+    private void customDialog(Button btn) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog,null);
+        ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog, null);
         builder.setCancelable(false)
                 .setView(cl);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -186,28 +213,28 @@ public class MainActivity extends AppCompatActivity {
                 EditText editTextUserNumber = alertDialog.findViewById(R.id.editText_user_number);
                 String numberSim = editTextUserNumber.getText().toString();
                 numberSim = numberSim.toUpperCase();
-                numberSim = numberSim.replaceAll("\\s+","");
+                numberSim = numberSim.replaceAll("\\s+", "");
                 numberSim = numberSim.replaceAll("EASY", "");
-                numberSim = numberSim.replaceAll("NORM","");
-                numberSim = numberSim.replaceAll("HARD","");
-                numberSim = numberSim.replaceAll(dateText,"");
+                numberSim = numberSim.replaceAll("NORM", "");
+                numberSim = numberSim.replaceAll("HARD", "");
+                numberSim = numberSim.replaceAll(dateText, "");
                 if (numberSim.isEmpty()) {
                     numberSim = "----- ";
                 }
                 String strBtn = "";
-                if(btn.equals(buttonEasy)){
+                if (btn.equals(buttonEasy)) {
                     strBtn = "EASY     ";
-                }else if(btn.equals(buttonNorm)){
+                } else if (btn.equals(buttonNorm)) {
                     strBtn = "NORM     ";
-                }else{
+                } else {
                     strBtn = "HARD     ";
                 }
 
                 setCountSim(btn);
-                arrayListSim.add(0,numberSim + "     "  + strBtn +  dateText);
+                arrayListSim.add(0, numberSim + "     " + strBtn + dateText);
                 getListViev();
 
-                saveData(numberSim,strBtn);
+                saveData(numberSim, strBtn);
             }
         }).setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
@@ -217,19 +244,19 @@ public class MainActivity extends AppCompatActivity {
         }).show();
     }
 
-    public void saveData(String numberSim,String strBtn){
+    public void saveData(String numberSim, String strBtn) {
         try {
-            FileOutputStream fileOutput = openFileOutput("user_data.txt",MODE_APPEND);
-            fileOutput.write((numberSim + "     " + strBtn +  dateText + "\n").getBytes());
+            FileOutputStream fileOutput = openFileOutput("user_data.txt", MODE_APPEND);
+            fileOutput.write((numberSim + "     " + strBtn + dateText + "\n").getBytes());
             fileOutput.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void getData(){
+    public void getData() {
         try {
-            FileOutputStream fileOutput = openFileOutput("user_data.txt",MODE_APPEND);
+            FileOutputStream fileOutput = openFileOutput("user_data.txt", MODE_APPEND);
             fileOutput.close();
             FileInputStream fileInput = openFileInput("user_data.txt");
             InputStreamReader reader = new InputStreamReader(fileInput);
@@ -237,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
 
             StringBuilder stringBuilder = new StringBuilder();
             String lines = "";
-            while ((lines = bufferedReader.readLine()) != null){
+            while ((lines = bufferedReader.readLine()) != null) {
                 stringBuilder.append(lines).append("\n");
             }
             String string = stringBuilder.toString();
@@ -245,7 +272,8 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
                 String[] arr = string.split("\n");
-                Collections.addAll(arrayListSim,arr);
+                Collections.addAll(arrayListSim, arr);
+                Collections.reverse(arrayListSim);
                 getListViev();
             }
         } catch (IOException e) {
@@ -253,11 +281,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void saveCountSim(){
+    public void saveCountSim() {
         String allCountForTxt = (intTextViewEasy + " " + intTextViewNorm + " " + intTextViewHard + " " + dateText);
 
         try {
-            FileOutputStream fileOutput = openFileOutput("countSim.txt",MODE_PRIVATE);
+            FileOutputStream fileOutput = openFileOutput("countSim.txt", MODE_PRIVATE);
             fileOutput.write((allCountForTxt).getBytes());
             fileOutput.close();
         } catch (IOException e) {
@@ -265,9 +293,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getCountSim(){
+    public void getCountSim() {
         try {
-            FileOutputStream fileOutput = openFileOutput("countSim.txt",MODE_APPEND);
+            FileOutputStream fileOutput = openFileOutput("countSim.txt", MODE_APPEND);
             fileOutput.close();
             FileInputStream fileInput = openFileInput("countSim.txt");
             InputStreamReader reader = new InputStreamReader(fileInput);
@@ -275,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
 
             StringBuilder stringBuilder = new StringBuilder();
             String lines;
-            while ((lines = bufferedReader.readLine()) != null){
+            while ((lines = bufferedReader.readLine()) != null) {
                 stringBuilder.append(lines).append(" ");
             }
             String string = stringBuilder.toString();
@@ -288,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
                     intTextViewNorm = Integer.parseInt(arr[1]);
                     intTextViewHard = Integer.parseInt(arr[2]);
                     intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-                    money(intTextViewSumSim,bolleanSwitch);
+                    money(intTextViewSumSim, switchState);
                     textViewSumSim.setText(String.valueOf(intTextViewSumSim));
 
                     textViewEasy.setText(String.valueOf(intTextViewEasy));
@@ -299,9 +327,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        money(intTextViewSumSim, switchState);
     }
 
-    public void money(int intTextViewSumSim, boolean b){
+    public void money(int intTextViewSumSim, boolean b) {
         if (intTextViewSumSim <= 23) {
             intMoney = intTextViewSumSim * 146;
         } else if (intTextViewSumSim <= 30) {
@@ -311,9 +340,53 @@ public class MainActivity extends AppCompatActivity {
         } else {
             intMoney = (3 * 210) + (7 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 7 - 3) * 230);
         }
-        if (b){
+        if (b) {
             intMoney = (int) (intMoney * 1.3);
         }
         money.setText(String.valueOf(intMoney));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        savePreferences();
+    }
+
+    void savePreferences(){
+        SharedPreferences.Editor ed = getSharedPreferences("test", Context.MODE_PRIVATE).edit();
+        ed.putBoolean("switchState", switchWeekend.isChecked());
+
+        moneyOnDay = String.valueOf(intMoney) + " " + String.valueOf(intTextViewSumSim) + " " + dateText;
+        ed.putString("moneyOnDay", moneyOnDay);
+        ed.commit();
+
+
+    }
+
+    void checkAtDay() {
+
+        if (moneyOnDay.equals("0")) {
+
+        } else {
+            try {
+
+                String[] arr1 = moneyOnDay.split(" ");
+                if (arr1[2].equals(dateText)) {
+
+                } else {
+                    try {
+                        FileOutputStream fileOutput = openFileOutput("moneyOnDay.txt", MODE_APPEND);
+                        fileOutput.write((moneyOnDay + "\n").getBytes());
+                        fileOutput.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    moneyOnDay = null;
+                }
+            } catch (RuntimeException e){
+
+            }
+        }
     }
 }
