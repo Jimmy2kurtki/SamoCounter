@@ -37,6 +37,7 @@ import java.util.Locale;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
+
     private TextView textViewEasy, textViewNorm, textViewHard, textViewSumSim, money;
     private Button buttonEasy, buttonNorm;
     private ListView listView;
@@ -45,23 +46,14 @@ public class MainActivity extends AppCompatActivity {
     Date currentDate = new Date();
     DateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
     String dateText = dateFormat.format(currentDate);
-    DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-    String timeText = timeFormat.format(currentDate);
-    int intTimeText;
     ArrayAdapter<String> adapter;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    Switch switchWeekend;
-    boolean switchState;
-    String moneyOnDay;
-    ArrayList<String> setMoneyOnDay = new ArrayList<>();
-
-
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         money = findViewById(R.id.money);
         textViewEasy = findViewById(R.id.textView_easy);
         textViewNorm = findViewById(R.id.textView_norm);
@@ -70,35 +62,30 @@ public class MainActivity extends AppCompatActivity {
         buttonEasy = findViewById(R.id.button_easy);
         buttonNorm = findViewById(R.id.button_norm);
         listView = findViewById(R.id.listView);
-        switchWeekend = findViewById(R.id.switch_weekend);
-        adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
-        intTimeText = Integer.parseInt(timeText.replaceAll(":", ""));
 
-
-        SharedPreferences sharedPreferences = getSharedPreferences("test", Context.MODE_PRIVATE);
-        switchState = sharedPreferences.getBoolean("switchState", true);
-        moneyOnDay = sharedPreferences.getString("moneyOnDay", "0");
-        switchWeekend.setChecked(switchState);
-
+        //получение сэмов из user_data.txt в arrayListSim
         getData();
 
+        //получение сэмов из countSim.txt в intTextViewSumSim
         getCountSim();
+
+        //лист с сэмиками
+        adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
         getListViev();
 
-        checkAtDay();
-
-        switchWeekend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        //нажатие на количество сэмов
+        textViewSumSim.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                money(intTextViewSumSim, b);
-                switchState = b;
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, CalendarSim.class);
+                startActivity(intent);
             }
         });
 
+        //нажатие на бабки
         money.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                savePreferences();
 
                 Intent intent = new Intent(MainActivity.this, MoneyOnDayActivity.class);
                 startActivity(intent);
@@ -107,8 +94,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getListViev() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
+
         listView.setAdapter(adapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -159,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 textViewHard.setText(String.valueOf(intTextViewHard));
             }
             intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-            money(intTextViewSumSim, switchState);
+            money(intTextViewSumSim);
             textViewSumSim.setText(String.valueOf(intTextViewSumSim));
 
             saveCountSim();
@@ -179,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public void setCountSim(@NonNull Button btn) {
         if (btn.equals(buttonEasy)) {
             intTextViewEasy++;
@@ -192,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
             textViewHard.setText(String.valueOf(intTextViewHard));
         }
         intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-        money(intTextViewSumSim, switchState);
+        money(intTextViewSumSim);
         textViewSumSim.setText(String.valueOf(intTextViewSumSim));
         saveCountSim();
     }
@@ -272,7 +259,13 @@ public class MainActivity extends AppCompatActivity {
 
             } else {
                 String[] arr = string.split("\n");
-                Collections.addAll(arrayListSim, arr);
+                for (int i = 0; i < arr.length; i++){
+                    boolean contains = arr[i].contains(dateText);
+                    if (contains){
+                        String s = arr[i].replaceAll(dateText,"");
+                        arrayListSim.add(s);
+                    }
+                }
                 Collections.reverse(arrayListSim);
                 getListViev();
             }
@@ -316,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
                     intTextViewNorm = Integer.parseInt(arr[1]);
                     intTextViewHard = Integer.parseInt(arr[2]);
                     intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-                    money(intTextViewSumSim, switchState);
+                    money(intTextViewSumSim);
                     textViewSumSim.setText(String.valueOf(intTextViewSumSim));
 
                     textViewEasy.setText(String.valueOf(intTextViewEasy));
@@ -327,10 +320,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        money(intTextViewSumSim, switchState);
+        money(intTextViewSumSim);
     }
 
-    public void money(int intTextViewSumSim, boolean b) {
+    public void money(int intTextViewSumSim) {
         if (intTextViewSumSim <= 23) {
             intMoney = intTextViewSumSim * 146;
         } else if (intTextViewSumSim <= 30) {
@@ -340,53 +333,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             intMoney = (3 * 210) + (7 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 7 - 3) * 230);
         }
-        if (b) {
-            intMoney = (int) (intMoney * 1.3);
-        }
         money.setText(String.valueOf(intMoney));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        savePreferences();
-    }
-
-    void savePreferences(){
-        SharedPreferences.Editor ed = getSharedPreferences("test", Context.MODE_PRIVATE).edit();
-        ed.putBoolean("switchState", switchWeekend.isChecked());
-
-        moneyOnDay = String.valueOf(intMoney) + " " + String.valueOf(intTextViewSumSim) + " " + dateText;
-        ed.putString("moneyOnDay", moneyOnDay);
-        ed.commit();
-
-
-    }
-
-    void checkAtDay() {
-
-        if (moneyOnDay.equals("0")) {
-
-        } else {
-            try {
-
-                String[] arr1 = moneyOnDay.split(" ");
-                if (arr1[2].equals(dateText)) {
-
-                } else {
-                    try {
-                        FileOutputStream fileOutput = openFileOutput("moneyOnDay.txt", MODE_APPEND);
-                        fileOutput.write((moneyOnDay + "\n").getBytes());
-                        fileOutput.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    moneyOnDay = null;
-                }
-            } catch (RuntimeException e){
-
-            }
-        }
     }
 }
