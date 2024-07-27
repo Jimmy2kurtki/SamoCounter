@@ -17,18 +17,47 @@
         android:background="@android:drawable/btn_dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_sumSim" />
 
     <ListView
-        android:id="@+id/listViewSimAtDate"
-        android:layout_width="0dp"
+        android:id="@+id/listView"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerSim" />
+
+    <TextView
+        android:id="@+id/textView_sumSim"
+        android:layout_width="182dp"
+        android:layout_height="98dp"
+        android:fontFamily="@font/audiowide"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor4_grey"
+        android:textSize="96sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="51" />
+
+    <TextView
+        android:id="@+id/money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/gallery_thumb"
+        android:fontFamily="@font/audiowide"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor4_grey"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerSim"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_sumSim"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2245" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -47,12 +48,18 @@ public class MainActivity extends AppCompatActivity {
     DateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
     String dateText = dateFormat.format(currentDate);
     ArrayAdapter<String> adapter;
+    String allSim;
+    DBHelper dbHelper;
+    private long backPressedTime;
+    private Toast backToast;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dbHelper = new DBHelper(this);
 
         money = findViewById(R.id.money);
         textViewEasy = findViewById(R.id.textView_easy);
@@ -71,14 +78,15 @@ public class MainActivity extends AppCompatActivity {
 
         //лист с сэмиками
         adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
-        getListViev();
+        getListView();
 
         //нажатие на количество сэмов
         textViewSumSim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(MainActivity.this, CalendarSim.class);
-                startActivity(intent);
+                startActivity(intent);finish();
             }
         });
 
@@ -87,13 +95,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(MainActivity.this, MoneyOnDayActivity.class);
-                startActivity(intent);
             }
         });
     }
 
-    public void getListViev() {
+    public void getListView() {
 
         listView.setAdapter(adapter);
 
@@ -210,16 +216,16 @@ public class MainActivity extends AppCompatActivity {
                 }
                 String strBtn = "";
                 if (btn.equals(buttonEasy)) {
-                    strBtn = "EASY     ";
+                    strBtn = "EASY";
                 } else if (btn.equals(buttonNorm)) {
-                    strBtn = "NORM     ";
+                    strBtn = "NORM";
                 } else {
-                    strBtn = "HARD     ";
+                    strBtn = "HARD";
                 }
 
                 setCountSim(btn);
-                arrayListSim.add(0, numberSim + "     " + strBtn + dateText);
-                getListViev();
+                arrayListSim.add(0, numberSim + "     " + strBtn + "     " + dateText);
+                getListView();
 
                 saveData(numberSim, strBtn);
             }
@@ -233,9 +239,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void saveData(String numberSim, String strBtn) {
         try {
+
             FileOutputStream fileOutput = openFileOutput("user_data.txt", MODE_APPEND);
-            fileOutput.write((numberSim + "     " + strBtn + dateText + "\n").getBytes());
+            fileOutput.write((numberSim + "     " + strBtn + "     " + dateText + "\n").getBytes());
             fileOutput.close();
+            Data data = new Data(numberSim, strBtn, dateText.toString());
+            dbHelper.AddOne(data);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -255,9 +264,11 @@ public class MainActivity extends AppCompatActivity {
                 stringBuilder.append(lines).append("\n");
             }
             String string = stringBuilder.toString();
+
             if (string.isEmpty()) {
 
             } else {
+
                 String[] arr = string.split("\n");
                 for (int i = 0; i < arr.length; i++){
                     boolean contains = arr[i].contains(dateText);
@@ -267,7 +278,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 Collections.reverse(arrayListSim);
-                getListViev();
+                getListView();
+
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -334,5 +346,18 @@ public class MainActivity extends AppCompatActivity {
             intMoney = (3 * 210) + (7 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 7 - 3) * 230);
         }
         money.setText(String.valueOf(intMoney));
+    }
+
+    public void onBackPressed() {
+
+        if(backPressedTime + 2000 > System.currentTimeMillis()){
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        }else {
+            backToast = Toast.makeText(getBaseContext(),"Нажмите еще раз, что бы выйти",Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPressedTime = System.currentTimeMillis();
     }
 }
