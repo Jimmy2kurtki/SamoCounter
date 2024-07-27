@@ -21,6 +21,8 @@ import java.util.Set;
 
 public class CalendarSim extends AppCompatActivity {
 
+    int id = 1;
+
     DBHelper dbHelper; //БДшка
 
     ArrayList<String> arrayListSim = new ArrayList<>(); //список всех сэмов

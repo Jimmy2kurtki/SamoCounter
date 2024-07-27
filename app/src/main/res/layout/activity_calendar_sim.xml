@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CalendarSim">
+    tools:context=".CalendarSim"
+    android:background="@color/whooshColor1_orange">
 
     <Spinner
         android:id="@+id/spinnerSim"

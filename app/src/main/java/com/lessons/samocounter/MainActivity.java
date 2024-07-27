@@ -34,11 +34,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
+    int id = 1;
     private TextView textViewEasy, textViewNorm, textViewHard, textViewSumSim, money;
     private Button buttonEasy, buttonNorm;
     private ListView listView;
@@ -52,12 +54,16 @@ public class MainActivity extends AppCompatActivity {
     DBHelper dbHelper;
     private long backPressedTime;
     private Toast backToast;
+    SharedPreferences pref;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        pref = getSharedPreferences("ID", MODE_PRIVATE);
 
         dbHelper = new DBHelper(this);
 
@@ -137,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void removeSim(String removeString, int i) {
-        arrayListSim.remove(i);
+
         boolean indexEasy = removeString.contains("EASY");
         boolean indexNorm = removeString.contains("NORM");
         boolean indexData = removeString.contains(dateText);
@@ -155,22 +161,13 @@ public class MainActivity extends AppCompatActivity {
             intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
             money(intTextViewSumSim);
             textViewSumSim.setText(String.valueOf(intTextViewSumSim));
+            dbHelper.DeleteOne(removeString);
+            arrayListSim.remove(i);
 
             saveCountSim();
         }
 
-        try {
-            FileOutputStream fileOutput = openFileOutput("user_data.txt", MODE_PRIVATE);
-            fileOutput.close();
-            fileOutput = openFileOutput("user_data.txt", MODE_APPEND);
-            for (int j = 0; j < arrayListSim.size(); j++) {
-                String string = arrayListSim.get(j);
-                fileOutput.write((string + "\n").getBytes());
-            }
-            fileOutput.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     public void setCountSim(@NonNull Button btn) {
@@ -212,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 numberSim = numberSim.replaceAll("HARD", "");
                 numberSim = numberSim.replaceAll(dateText, "");
                 if (numberSim.isEmpty()) {
-                    numberSim = "----- ";
+                    numberSim = "-----";
                 }
                 String strBtn = "";
                 if (btn.equals(buttonEasy)) {
@@ -224,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 setCountSim(btn);
-                arrayListSim.add(0, numberSim + "     " + strBtn + "     " + dateText);
+                arrayListSim.add(0, numberSim + " " + strBtn + " " + dateText);
                 getListView();
 
                 saveData(numberSim, strBtn);
@@ -238,51 +235,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveData(String numberSim, String strBtn) {
-        try {
 
-            FileOutputStream fileOutput = openFileOutput("user_data.txt", MODE_APPEND);
-            fileOutput.write((numberSim + "     " + strBtn + "     " + dateText + "\n").getBytes());
-            fileOutput.close();
-            Data data = new Data(numberSim, strBtn, dateText.toString());
-            dbHelper.AddOne(data);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+        LinkedList<Data> list = dbHelper.GetAll();
+        String text = "";
+        for(Data d:list) if (d.date.equals(dateText)) text = text + d.nameSim + " " + d.emh + " " + d.date + " " + "\n";
+        if (text.isEmpty()) {
+
+        } else {
+            String[] arr = text.split("\n");
         }
+        Data data = new Data(numberSim, strBtn, dateText.toString());
+        dbHelper.AddOne(data);
+
     }
 
     public void getData() {
-        try {
-            FileOutputStream fileOutput = openFileOutput("user_data.txt", MODE_APPEND);
-            fileOutput.close();
-            FileInputStream fileInput = openFileInput("user_data.txt");
-            InputStreamReader reader = new InputStreamReader(fileInput);
-            BufferedReader bufferedReader = new BufferedReader(reader);
+        LinkedList<Data> list = dbHelper.GetAll();
+        String text = "";
+        for(Data d:list) if (d.date.equals(dateText)) text = text + d.nameSim + " " + d.emh + " " + d.date +  "\n";
 
-            StringBuilder stringBuilder = new StringBuilder();
-            String lines = "";
-            while ((lines = bufferedReader.readLine()) != null) {
-                stringBuilder.append(lines).append("\n");
-            }
-            String string = stringBuilder.toString();
+        if (text.isEmpty()) {
 
-            if (string.isEmpty()) {
+        } else {
+            String[] arr = text.split("\n");
 
-            } else {
-
-                String[] arr = string.split("\n");
-                for (int i = 0; i < arr.length; i++){
-                    boolean contains = arr[i].contains(dateText);
-                    if (contains){
-                        String s = arr[i].replaceAll(dateText,"");
-                        arrayListSim.add(s);
-                    }
-                }
-                Collections.reverse(arrayListSim);
-                getListView();
-
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            Collections.addAll(arrayListSim,arr);
+            Collections.reverse(arrayListSim);
+            getListView();
         }
     }
 
