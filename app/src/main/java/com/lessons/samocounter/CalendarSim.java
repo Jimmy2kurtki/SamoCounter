@@ -1,6 +1,5 @@
 package com.lessons.samocounter;
 
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,18 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-
 public class CalendarSim extends AppCompatActivity {
-
-    int id = 1;
 
     DBHelper dbHelper; //БДшка
 
@@ -37,10 +32,7 @@ public class CalendarSim extends AppCompatActivity {
 
     ListView listViewSimAtDate; //лист с сэмами
 
-    TextView textViewSumSim, money; // поля с колвом сэмов и денег
-
-
-
+    TextView textViewSumSim, money, textViewSend; // поля с колвом сэмов и денег
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -53,6 +45,7 @@ public class CalendarSim extends AppCompatActivity {
 
         money = findViewById(R.id.money);
         textViewSumSim = findViewById(R.id.textView_sumSim);
+        textViewSend = findViewById(R.id.textViewSend);
 
 
         //получаем ВСЕ сэмики и даты из БД в arrayListSim и arrayListForSpinner
@@ -87,6 +80,41 @@ public class CalendarSim extends AppCompatActivity {
         listViewSimAtDate = findViewById(R.id.listView);
         listViewSimAtDate.setAdapter(adapterListView);
 
+        textViewSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String sendSim = "";
+                ArrayList<String> arrayListForSEND = new ArrayList<>();
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                for(String s:arrayListForListView){
+                    String[] arr = s.split(" ");
+                    arrayListForSEND.add(arr[0]);
+                }
+                for(int i = 0; i <= arrayListForSEND.size(); i++){
+                    if (i != arrayListForSEND.size()) {
+                        sendSim = sendSim + (i + 1) + ") " + arrayListForSEND.get(i) + "\n";
+                    } else {
+                        String[] arr = arrayListForListView.get(0).split(" ");
+                        sendSim = sendSim + arr[2];
+                    }
+                }
+                sendIntent.putExtra(Intent.EXTRA_TEXT, sendSim);
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, null));
+
+
+            }
+        });
+
+        money.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CalendarSim.this, Money.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
     }
 
@@ -103,9 +131,10 @@ public class CalendarSim extends AppCompatActivity {
 
         String[] arrDate = dateText.split("\n");
         Collections.addAll(arrayListForSpinner, arrDate);
-        Set<String> set = new HashSet<>(arrayListForSpinner);
+        Set<String> set = new LinkedHashSet<>(arrayListForSpinner);
         arrayListForSpinner.clear();
         arrayListForSpinner.addAll(set);
+        Collections.reverse(arrayListForSpinner);
 
     }
 

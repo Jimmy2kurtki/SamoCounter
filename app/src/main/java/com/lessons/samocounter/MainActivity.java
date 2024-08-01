@@ -1,7 +1,5 @@
 package com.lessons.samocounter;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,18 +8,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -30,17 +27,13 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    int id = 1;
     private TextView textViewEasy, textViewNorm, textViewHard, textViewSumSim, money;
     private Button buttonEasy, buttonNorm;
     private ListView listView;
@@ -50,18 +43,17 @@ public class MainActivity extends AppCompatActivity {
     DateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
     String dateText = dateFormat.format(currentDate);
     ArrayAdapter<String> adapter;
-    String allSim;
     DBHelper dbHelper;
     private long backPressedTime;
     private Toast backToast;
     SharedPreferences pref;
+    private Button allButtonsForMethod;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         pref = getSharedPreferences("ID", MODE_PRIVATE);
 
@@ -76,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         buttonNorm = findViewById(R.id.button_norm);
         listView = findViewById(R.id.listView);
 
-        //получение сэмов из user_data.txt в arrayListSim
+        //получение сэмов из бд в arrayListSim
         getData();
 
         //получение сэмов из countSim.txt в intTextViewSumSim
@@ -95,16 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);finish();
             }
         });
-
-        //нажатие на бабки
-        money.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
     }
-
+    //лист с сэмами
     public void getListView() {
 
         listView.setAdapter(adapter);
@@ -142,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         ;
     }
 
+    //удаление сэма
     public void removeSim(String removeString, int i) {
 
         boolean indexEasy = removeString.contains("EASY");
@@ -170,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //подсчет и вывод колва сэмов на экран
     public void setCountSim(@NonNull Button btn) {
         if (btn.equals(buttonEasy)) {
             intTextViewEasy++;
@@ -187,69 +173,15 @@ public class MainActivity extends AppCompatActivity {
         saveCountSim();
     }
 
-    public void clickOnButton(View v) {
-        customDialog((Button) v);
-    }
-
-    private void customDialog(Button btn) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog, null);
-        builder.setCancelable(false)
-                .setView(cl);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                AlertDialog alertDialog = (AlertDialog) dialogInterface;
-                EditText editTextUserNumber = alertDialog.findViewById(R.id.editText_user_number);
-                String numberSim = editTextUserNumber.getText().toString();
-                numberSim = numberSim.toUpperCase();
-                numberSim = numberSim.replaceAll("\\s+", "");
-                numberSim = numberSim.replaceAll("EASY", "");
-                numberSim = numberSim.replaceAll("NORM", "");
-                numberSim = numberSim.replaceAll("HARD", "");
-                numberSim = numberSim.replaceAll(dateText, "");
-                if (numberSim.isEmpty()) {
-                    numberSim = "-----";
-                }
-                String strBtn = "";
-                if (btn.equals(buttonEasy)) {
-                    strBtn = "EASY";
-                } else if (btn.equals(buttonNorm)) {
-                    strBtn = "NORM";
-                } else {
-                    strBtn = "HARD";
-                }
-
-                setCountSim(btn);
-                arrayListSim.add(0, numberSim + " " + strBtn + " " + dateText);
-                getListView();
-
-                saveData(numberSim, strBtn);
-            }
-        }).setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }).show();
-    }
-
+    //сохранение номера сэма в бд
     public void saveData(String numberSim, String strBtn) {
 
-
-        LinkedList<Data> list = dbHelper.GetAll();
-        String text = "";
-        for(Data d:list) if (d.date.equals(dateText)) text = text + d.nameSim + " " + d.emh + " " + d.date + " " + "\n";
-        if (text.isEmpty()) {
-
-        } else {
-            String[] arr = text.split("\n");
-        }
-        Data data = new Data(numberSim, strBtn, dateText.toString());
+        Data data = new Data(numberSim, strBtn, dateText);
         dbHelper.AddOne(data);
 
     }
 
+    //получение всех сэмов из бд
     public void getData() {
         LinkedList<Data> list = dbHelper.GetAll();
         String text = "";
@@ -266,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //сохранение сегодняшнее колво сэмов в тхт
     public void saveCountSim() {
         String allCountForTxt = (intTextViewEasy + " " + intTextViewNorm + " " + intTextViewHard + " " + dateText);
 
@@ -278,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //получение сегодняшнего колва сэмов из тхт
     public void getCountSim() {
         try {
             FileOutputStream fileOutput = openFileOutput("countSim.txt", MODE_APPEND);
@@ -315,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
         money(intTextViewSumSim);
     }
 
+    //подсчет денег за сэмы
     public void money(int intTextViewSumSim) {
         if (intTextViewSumSim <= 23) {
             intMoney = intTextViewSumSim * 146;
@@ -328,6 +263,108 @@ public class MainActivity extends AppCompatActivity {
         money.setText(String.valueOf(intMoney));
     }
 
+    //добавление номера сэма в список
+    public void setNumberSim(String numberSim, Button btn){
+        numberSim = numberSim.toUpperCase();
+        numberSim = numberSim.replaceAll("\\s+", "");
+        numberSim = numberSim.replaceAll("EASY", "");
+        numberSim = numberSim.replaceAll("NORM", "");
+        numberSim = numberSim.replaceAll("HARD", "");
+        numberSim = numberSim.replaceAll(dateText, "");
+        if (numberSim.isEmpty()) {
+            numberSim = "-----";
+        }
+        String strBtn = "";
+        if (btn.equals(buttonEasy)) {
+            strBtn = "EASY";
+        } else if (btn.equals(buttonNorm)) {
+            strBtn = "NORM";
+        } else {
+            strBtn = "HARD";
+        }
+
+        setCountSim(btn);
+        arrayListSim.add(0, numberSim + " " + strBtn + " " + dateText);
+        getListView();
+
+        saveData(numberSim, strBtn);
+    }
+
+    //слушатели кнопок
+    @SuppressLint("ClickableViewAccessibility")
+    public void touchListener(View v){
+        Button b = (Button) v;
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customDialog(b);
+            }
+        });
+        b.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                clickScanner(b);
+                return false;
+            }
+        });
+    }
+
+    //номер сэма текстом
+    private void customDialog(Button btn) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog, null);
+        builder.setCancelable(false)
+                .setView(cl);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                AlertDialog alertDialog = (AlertDialog) dialogInterface;
+                EditText editTextUserNumber = alertDialog.findViewById(R.id.editText_user_number);
+                assert editTextUserNumber != null;
+                String numberSim = editTextUserNumber.getText().toString();
+                setNumberSim(numberSim, btn);
+            }
+        }).setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).show();
+    }
+
+    //номер сэма QRкодом
+    public void clickScanner(Button b){
+        IntentIntegrator intentIntegrator = new IntentIntegrator(MainActivity.this);
+        intentIntegrator.setOrientationLocked(true);
+        intentIntegrator.setPrompt("Scan a QR code");
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        intentIntegrator.initiateScan();
+        allButtonsForMethod = b;
+    }
+
+    //результат сканирования QR
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+        if(intentResult != null){
+            String contents = intentResult.getContents();
+            if (contents != null){
+                contents = contents.replaceAll("https://wsh.bike\\?s=", "");
+                contents = contents.replaceAll("https", "");
+                contents = contents.replaceAll("//wsh.bike\\?s=", "");
+                contents = contents.replaceAll("//wsh", "");
+                contents = contents.replaceAll(".bike\\?s=", "");
+                contents = contents.replaceAll("s=", "");
+                setNumberSim(contents,allButtonsForMethod);
+            }
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+
+    //кнопка назад
     public void onBackPressed() {
 
         if(backPressedTime + 2000 > System.currentTimeMillis()){
