@@ -35,7 +35,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textViewEasy, textViewNorm, textViewHard, textViewSumSim, money;
-    private Button buttonEasy, buttonNorm;
+    private Button buttonEasy, buttonNorm, buttonHard;
     private ListView listView;
     private int intTextViewEasy = 0, intTextViewNorm = 0, intTextViewHard = 0, intTextViewSumSim, intMoney;
     private ArrayList<String> arrayListSim = new ArrayList<>();
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private Toast backToast;
     SharedPreferences pref;
     private Button allButtonsForMethod;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -66,7 +67,13 @@ public class MainActivity extends AppCompatActivity {
         textViewSumSim = findViewById(R.id.textView_sumSim);
         buttonEasy = findViewById(R.id.button_easy);
         buttonNorm = findViewById(R.id.button_norm);
+        buttonHard = findViewById(R.id.button_hard);
         listView = findViewById(R.id.listView);
+
+        //решение проблемы со слушателем (нужно было 2 раза нажать)
+        prefireTouchListener(buttonEasy);
+        prefireTouchListener(buttonNorm);
+        prefireTouchListener(buttonHard);
 
         //получение сэмов из бд в arrayListSim
         getData();
@@ -288,6 +295,11 @@ public class MainActivity extends AppCompatActivity {
         getListView();
 
         saveData(numberSim, strBtn);
+    }
+
+    public void prefireTouchListener(Button b){
+        View v = (View) b;
+        touchListener(v);
     }
 
     //слушатели кнопок
