@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whooshColor1_orange"
+    tools:context=".QRsim">
+
+    <EditText
+        android:id="@+id/editText_qr_VR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:fontFamily="@font/audiowide"
+        android:gravity="center"
+        android:hint="NUMBER SIM"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor4_grey"
+        android:textColorLink="@color/whooshColor4_grey"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_qr_VR"
+        android:layout_width="222dp"
+        android:layout_height="61dp"
+        android:backgroundTint="@color/whooshColor3_red"
+        android:fontFamily="@font/audiowide"
+        android:text="Get QR.PDF"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor4_grey"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:cornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_qr_VR" />
+
+    <ImageView
+        android:id="@+id/qr_code"
+        android:layout_width="match_parent"
+        android:layout_height="569dp"
+        android:layout_below="@+id/button_qr_VR"
+        android:layout_marginTop="8dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toBottomOf="@+id/button_qr_VR"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/textView_qr_VR"
+        android:layout_width="369dp"
+        android:layout_height="60dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/qr_code"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/qr_code"
+        app:layout_constraintVertical_bias="0.829"
+        tools:text="Ac4879" />
+</androidx.constraintlayout.widget.ConstraintLayout>

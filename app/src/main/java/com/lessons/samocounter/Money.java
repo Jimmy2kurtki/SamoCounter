@@ -181,7 +181,7 @@ public class Money extends AppCompatActivity {
                     arr1[i] = arrayListForSpinnerStart.get(i);
                 }
 
-
+                // обрезать массив arr1  в cutListSpinner             1 индекс            2 индекс
                 String[] cutListSpinner = Arrays.copyOfRange(arr1, indexDataStart, indexDataFinish + 1);
 
                 circleForCutListSim(cutListSim, cutListSpinner);

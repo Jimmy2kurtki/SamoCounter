@@ -94,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);finish();
             }
         });
+
+        money.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, VremennoeReshenie.class);
+                startActivity(intent);finish();
+            }
+        });
     }
     //лист с сэмами
     public void getListView() {
@@ -362,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
         if(intentResult != null){
             String contents = intentResult.getContents();
             if (contents != null){
+                contents = contents.replaceAll("\\\\", "");
                 contents = contents.replaceAll("https://wsh.bike\\?s=", "");
                 contents = contents.replaceAll("https", "");
                 contents = contents.replaceAll("//wsh.bike\\?s=", "");

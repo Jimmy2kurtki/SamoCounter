@@ -7,28 +7,17 @@
 
     <TextView
         android:id="@+id/number_Sim"
-        android:layout_width="335dp"
-        android:layout_height="40dp"
+        android:layout_width="411dp"
+        android:layout_height="42dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="-1dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="1dp"
         android:fontFamily="@font/audiowide"
         android:textColor="@color/whooshColor4_grey"
         android:textSize="22sp"
         android:textStyle="bold"
         tools:text="Text" />
-
-    <CheckBox
-        android:layout_width="71dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="1dp"
-        android:layout_toEndOf="@+id/number_Sim"
-        android:buttonTint="@color/whooshColor4_grey"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:shadowColor="@color/whooshColor4_grey"
-        android:textColor="@color/whooshColor4_grey"
-        android:textColorHighlight="@color/whooshColor4_grey"
-        android:textColorHint="@color/whooshColor4_grey"
-        android:textColorLink="@color/whooshColor4_grey" />
 
 </RelativeLayout>
