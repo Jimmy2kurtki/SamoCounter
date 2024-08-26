@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -17,6 +18,9 @@ const val HEAD_SIZE = 90
 const val CELLS_ON_FIELD = 12
 
 class MainActivitySnake : AppCompatActivity() {
+    private lateinit var textViewSnakeSim: TextView
+    private lateinit var textViewSnakeMoney: TextView
+
     private  val allTale = mutableListOf<PartOfTale>()
     private val human by lazy {
         ImageView(this)
@@ -44,6 +48,8 @@ class MainActivitySnake : AppCompatActivity() {
 
         container = findViewById(R.id.container)
 
+        textViewSnakeSim = findViewById(R.id.textView_snakeSim)
+        textViewSnakeMoney = findViewById(R.id.textView_snakeMoney)
         val ivArrowUp: ImageView = findViewById(R.id.ivArrowUp)
         val ivArrowRights: ImageView = findViewById(R.id.ivArrowRight)
         val ivArrowBottom: ImageView = findViewById(R.id.ivArrowBottom)
@@ -121,6 +127,10 @@ class MainActivitySnake : AppCompatActivity() {
         if((head.left == human.left) && (head.top == human.top)) {
             generateNewHuman()
             addPartOfTale(head.top, head.left)
+            increaseDifficult()
+
+            textViewSnakeSim.setText(allTale.size.toString())
+            textViewSnakeMoney.setText((allTale.size * 146).toString())
         }
     }
 
@@ -128,8 +138,8 @@ class MainActivitySnake : AppCompatActivity() {
         if(gameSpeed <= MINIMUM_GAME_SPEED){
             return
         }
-        if(allTale.size % 5 == 0){
-            gameSpeed -= 100
+        if(allTale.size % 7 == 0){
+            gameSpeed -= 50
         }
     }
 
@@ -183,8 +193,17 @@ class MainActivitySnake : AppCompatActivity() {
     }
 
     private fun showScore() {
+        var sizeTale = allTale.size
+        var wordSim = " сэмиков"
+        if(sizeTale == 1 || sizeTale == 21 || sizeTale == 31 || sizeTale == 41 || sizeTale ==51){
+            wordSim = " сэмик"
+        } else if (sizeTale == 2 || sizeTale == 3 || sizeTale == 4 || sizeTale == 22 || sizeTale == 23 ||
+            sizeTale == 24 || sizeTale == 32 || sizeTale == 33 || sizeTale == 34 || sizeTale == 42 ||
+            sizeTale == 43 || sizeTale == 44 || sizeTale == 52 || sizeTale == 53 || sizeTale == 54){
+            wordSim = " сэмика"
+        }
         AlertDialog.Builder(this)
-            .setTitle("Ты сделал ${allTale.size} сэмиков и заработал ${allTale.size * 146} ₽")
+            .setTitle("Ты сделал " +sizeTale + wordSim + " и заработал ${allTale.size * 146} ₽")
             .setPositiveButton("Заново", {_, _ ->
                 this.recreate()
             })
