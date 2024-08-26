@@ -2,6 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#cc0000</color>
+    <color name="blue">#0044CC</color>
     <color name="whooshColor1_orange">#feb827</color>
     <color name="whooshColor2_white">#fefefe</color>
     <color name="whooshColor3_red">#fe6d2b</color>

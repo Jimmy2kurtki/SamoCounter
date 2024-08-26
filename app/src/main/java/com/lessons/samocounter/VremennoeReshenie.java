@@ -1,6 +1,7 @@
 package com.lessons.samocounter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -50,5 +51,15 @@ public class VremennoeReshenie extends AppCompatActivity {
             }
         });
 
+    }
+    public void onBackPressed() {
+        super.onBackPressed();
+        try {
+            Intent intent = new Intent(VremennoeReshenie.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } catch (Exception e) {
+
+        }
     }
 }

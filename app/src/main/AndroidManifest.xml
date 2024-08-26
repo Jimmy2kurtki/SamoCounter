@@ -19,6 +19,9 @@
         android:theme="@style/Theme.SamoCounter"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivitySnake"
+            android:exported="false" />
+        <activity
             android:name=".VremennoeReshenie"
             android:exported="false" />
         <activity

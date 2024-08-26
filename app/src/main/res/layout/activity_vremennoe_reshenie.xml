@@ -58,6 +58,7 @@
         android:id="@+id/textView_qr_VR"
         android:layout_width="369dp"
         android:layout_height="60dp"
+        android:fontFamily="@font/audiowide"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="50sp"

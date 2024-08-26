@@ -115,6 +115,15 @@ public class CalendarSim extends AppCompatActivity {
             }
         });
 
+        textViewSumSim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CalendarSim.this,MainActivitySnake.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
     }
 
