@@ -1,6 +1,7 @@
-package com.lessons.samocounter;
+package com.lessons.samocounter.calendar;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +10,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.lessons.samocounter.DB.DBHelper;
+import com.lessons.samocounter.DB.Data;
+import com.lessons.samocounter.MainActivity;
+import com.lessons.samocounter.R;
+import com.lessons.samocounter.money.MoneyCount;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -78,7 +89,7 @@ public class CalendarSim extends AppCompatActivity {
         adapterListView = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListForListView);
 
         listViewSimAtDate = findViewById(R.id.listView);
-        listViewSimAtDate.setAdapter(adapterListView);
+        getListViewSimAtDate();
 
         textViewSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,32 +117,48 @@ public class CalendarSim extends AppCompatActivity {
             }
         });
 
-        money.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CalendarSim.this, Money.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        textViewSumSim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CalendarSim.this,MainActivitySnake.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
 
     }
 
+    private void getListViewSimAtDate(){
+        listViewSimAtDate.setAdapter(adapterListView);
+
+        listViewSimAtDate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CalendarSim.this);
+                ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_delete,null);
+                String removeString = arrayListForListView.get(i);
+                String removeString1 = removeString.replaceAll("EASY", "");
+                removeString1 = removeString1.replaceAll("NORM", "");
+                removeString1 = removeString1.replaceAll("HARD", "");
+                builder.setMessage(removeString1)
+                        .setView(cl)
+                        .setCancelable(true)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dbHelper.deleteOne(removeString);
+                                adapterListView.notifyDataSetChanged();
+                            }
+                        })
+                        .setNeutralButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                AlertDialog dialogDelete = builder.create();
+                dialogDelete.show();
+            }
+        });
+    }
+
     void getData() {
-        LinkedList<Data> list = dbHelper.GetAll();
+        LinkedList<Data> list = dbHelper.getAll();
         String text = "";
         String dateText = "";
-        for(Data d:list) text = text + d.nameSim + " " + d.emh + " " + d.date + "\n";
+        for(Data d:list) text = text + d.nameSim.replaceAll(".BIKE/\\?", "") + " " + d.emh + " " + d.date + "\n";
         for(Data d:list) dateText = dateText + d.date + "\n";
 
         String[] arr = text.split("\n");
@@ -160,26 +187,11 @@ public class CalendarSim extends AppCompatActivity {
             }
         }
         adapterListView.notifyDataSetChanged();
-        countSimAndMoney(arrayListForListView.size());
-
+        MoneyCount moneyCount = new MoneyCount();
+        textViewSumSim.setText(String.valueOf(arrayListForListView.size()));
+        money.setText(String.valueOf(moneyCount.moneyCount(arrayListForListView.size(),true)));
     }
 
-    void countSimAndMoney(int count){
-
-        textViewSumSim.setText(String.valueOf(count));
-
-        int intMoney;
-        if (count <= 23) {
-            intMoney = count * 146;
-        } else if (count <= 30) {
-            intMoney = ((count - 23) * 190) + (23 * 146);
-        } else if (count <= 33) {
-            intMoney = (7 * 190) + (23 * 146) + ((count - 23 - 7) * 210);
-        } else {
-            intMoney = (3 * 210) + (7 * 190) + (23 * 146) + ((count - 23 - 7 - 3) * 230);
-        }
-        money.setText(String.valueOf(intMoney));
-    }
 
     public void onBackPressed() {
         super.onBackPressed();

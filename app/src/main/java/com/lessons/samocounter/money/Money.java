@@ -1,4 +1,4 @@
-package com.lessons.samocounter;
+package com.lessons.samocounter.money;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -9,6 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.lessons.samocounter.DB.DBHelper;
+import com.lessons.samocounter.DB.Data;
+import com.lessons.samocounter.MainActivity;
+import com.lessons.samocounter.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -220,10 +225,10 @@ public class Money extends AppCompatActivity {
     }
 
     public void sumMoney(ArrayList<Integer> countSimAtDates) {
-
+        MoneyCount moneyCount = new MoneyCount();
         for (int i = 0; i < countSimAtDates.size(); i++) {
 
-            countSimAtDates.set(i, moneyCount(countSimAtDates.get(i)));
+            countSimAtDates.set(i, moneyCount.moneyCount(countSimAtDates.get(i),true));
 
         }
 
@@ -239,22 +244,9 @@ public class Money extends AppCompatActivity {
 
     }
 
-    public int moneyCount(int count) {
-        int intMoney;
-        if (count <= 23) {
-            intMoney = count * 146;
-        } else if (count <= 30) {
-            intMoney = ((count - 23) * 190) + (23 * 146);
-        } else if (count <= 33) {
-            intMoney = (7 * 190) + (23 * 146) + ((count - 23 - 7) * 210);
-        } else {
-            intMoney = (3 * 210) + (7 * 190) + (23 * 146) + ((count - 23 - 7 - 3) * 230);
-        }
-        return intMoney;
-    }
 
     void getData() {
-        LinkedList<Data> list = dbHelper.GetAll();
+        LinkedList<Data> list = dbHelper.getAll();
         String text = "";
         String dateText = "";
         for (Data d : list) text = text + d.nameSim + " " + d.emh + " " + d.date + "\n";
@@ -278,7 +270,7 @@ public class Money extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         try {
-            Intent intent = new Intent(Money.this, CalendarSim.class);
+            Intent intent = new Intent(Money.this, MainActivity.class);
             startActivity(intent);
             finish();
         } catch (Exception e) {

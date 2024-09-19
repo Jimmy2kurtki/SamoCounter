@@ -1,4 +1,4 @@
-package com.lessons.samocounter;
+package com.lessons.samocounter.qrsim;
 
 
 import android.Manifest;
@@ -14,6 +14,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.lessons.samocounter.R;
 
 import java.io.FileNotFoundException;
 

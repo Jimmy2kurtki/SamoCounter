@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whooshColor1_orange"
+    tools:context=".Calculator">
+
+    <LinearLayout
+        android:id="@+id/sim_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView_result_sim_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/audiowide"
+            android:gravity="center"
+
+            android:textColor="@color/whooshColor4_grey"
+            android:textSize="48sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_money_at_dates"
+            tools:text="5487" />
+
+        <EditText
+            android:id="@+id/editText_sim_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:fontFamily="@font/audiowide"
+            android:gravity="center"
+            android:hint="SIM"
+            android:inputType="number"
+            android:textColor="@color/whooshColor4_grey"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_money_at_dates" />
+
+        <TextView
+            android:id="@+id/textView_button_sim_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/zoom_plate"
+            android:fontFamily="@font/audiowide"
+            android:text="SIM -> MONEY"
+            android:textAllCaps="false"
+            android:textColor="@color/whooshColor5_grey"
+            android:textColorLink="@color/whooshColor3_red"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/money_sim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sim_money">
+
+        <TextView
+            android:id="@+id/textView_result_money_sim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/audiowide"
+            android:gravity="center"
+            android:textColor="@color/whooshColor4_grey"
+            android:textSize="48sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_money_at_dates"
+            tools:text="123" />
+
+        <EditText
+            android:id="@+id/editText_money_sim"
+            android:ems="10"
+            android:inputType="number"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/audiowide"
+            android:gravity="center"
+            android:textColor="@color/whooshColor4_grey"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_money_at_dates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="money" />
+
+        <TextView
+            android:id="@+id/textView_button_money_sim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/zoom_plate"
+            android:fontFamily="@font/audiowide"
+            android:text="MONEY -> SIM"
+            android:textColor="@color/whooshColor5_grey"
+            android:textColorLink="@color/whooshColor3_red"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

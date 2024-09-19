@@ -5,7 +5,7 @@
     android:id="@+id/textView_sim_at_dates"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CalendarSim"
+    tools:context=".calendar.CalendarSim"
     android:background="@color/whooshColor1_orange">
 
     <Spinner

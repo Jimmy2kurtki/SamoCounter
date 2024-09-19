@@ -20,49 +20,60 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <TextView
             android:id="@+id/button_easy"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_weight="1"
+            android:background="@drawable/circle"
             android:backgroundTint="@color/whooshColor2_white"
             android:fontFamily="@font/audiowide"
+            android:gravity="center"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:onClick="touchListener"
             android:text="@string/easy"
+            android:textAlignment="center"
             android:textColor="@color/whooshColor4_grey"
-            android:textSize="24sp"
-            app:cornerRadius="15dp" />
+            android:textSize="24sp" />
 
-        <Button
+        <TextView
             android:id="@+id/button_norm"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_weight="1"
+            android:background="@drawable/circle"
             android:backgroundTint="@color/whooshColor3_red"
             android:fontFamily="@font/audiowide"
+            android:gravity="center"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:onClick="touchListener"
             android:text="@string/middle"
+            android:textAlignment="center"
             android:textColor="@color/whooshColor4_grey"
-            android:textSize="24sp"
-            app:cornerRadius="15dp" />
+            android:textSize="24sp" />
 
-        <Button
+        <TextView
             android:id="@+id/button_hard"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_weight="1"
+            android:background="@drawable/circle"
             android:backgroundTint="@color/whooshColor4_grey"
             android:fontFamily="@font/audiowide"
+            android:gravity="center"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:onClick="touchListener"
             android:text="@string/hard"
-            android:textSize="24sp"
-            app:cornerRadius="15dp" />
+            android:textAlignment="center"
+            android:textColor="@color/whooshColor2_white"
+            android:textSize="24sp" />
+
     </LinearLayout>
 
     <TextView

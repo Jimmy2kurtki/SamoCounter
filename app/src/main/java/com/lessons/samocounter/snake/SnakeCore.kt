@@ -1,4 +1,4 @@
-package com.lessons.samocounter
+package com.lessons.samocounter.snake
 
 const val START_GAME_SPEED = 500L
 const val MINIMUM_GAME_SPEED = 200L

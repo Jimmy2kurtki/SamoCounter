@@ -1,4 +1,4 @@
-package com.lessons.samocounter;
+package com.lessons.samocounter.DB;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -41,7 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void AddOne(Data data){
+    public void addOne(Data data){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -54,7 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public LinkedList<Data> GetAll(){
+    public LinkedList<Data> getAll(){
         LinkedList<Data> list = new LinkedList<>();
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -76,7 +76,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public void DeleteOne(String string){
+    public void deleteOne(String string){
 
         SQLiteDatabase db = this.getWritableDatabase();
         String selection = COLUMN_NAMESIM + " LIKE ? AND " + COLUMN_EMH + " LIKE ? AND " + COLUMN_DATE + " LIKE ?";

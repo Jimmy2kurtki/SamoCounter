@@ -9,7 +9,6 @@ plugins {
 android {
     namespace = "com.lessons.samocounter"
     compileSdk = 34
-
     defaultConfig {
         applicationId = "com.lessons.samocounter"
         minSdk = 24
@@ -36,12 +35,29 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures{
+        viewBinding = true
+    }
+    buildFeatures.dataBinding  = true
 }
 
 dependencies {
 
+    implementation ("org.jsoup:jsoup:1.11.1")
+
+    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
 
 
+    implementation ("com.mikepenz:materialdrawer:6.1.2")
+
+//required support lib modules
+    implementation ("androidx.appcompat:appcompat:1.7.0")
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+    implementation ("androidx.annotation:annotation:1.8.2")
+    implementation ("com.google.android.material:material:1.12.0")
+    implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
     implementation(libs.appcompat)
     implementation(libs.material)

@@ -1,4 +1,4 @@
-package com.lessons.samocounter
+package com.lessons.samocounter.snake
 
 import android.widget.ImageView
 

@@ -7,6 +7,9 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -19,23 +22,33 @@
         android:theme="@style/Theme.SamoCounter"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivitySnake"
+            android:name=".schedule.WorkScheduleActivity"
             android:exported="false" />
         <activity
-            android:name=".VremennoeReshenie"
+            android:name=".DataTransfer"
             android:exported="false" />
         <activity
-            android:name=".QRsim"
+            android:name=".Calculator"
             android:exported="false" />
         <activity
-            android:name=".Money"
+            android:name=".snake.MainActivitySnake"
             android:exported="false" />
         <activity
-            android:name=".CalendarSim"
+            android:name=".qrsim.VremennoeReshenie"
+            android:exported="false" />
+        <activity
+            android:name=".qrsim.QRsim"
+            android:exported="false" />
+        <activity
+            android:name=".money.Money"
+            android:exported="false" />
+        <activity
+            android:name=".calendar.CalendarSim"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.SamoCounter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

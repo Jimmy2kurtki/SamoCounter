@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whooshColor1_orange"
-    tools:context=".QRsim">
+    tools:context=".qrsim.QRsim">
 
     <EditText
         android:id="@+id/editText_qr_VR"
@@ -56,17 +56,17 @@
 
     <TextView
         android:id="@+id/textView_qr_VR"
-        android:layout_width="369dp"
-        android:layout_height="60dp"
-        android:fontFamily="@font/audiowide"
+        android:layout_width="381dp"
+        android:layout_height="81dp"
+        android:fontFamily="@font/bakbak_one"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="50sp"
+        android:textSize="70sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/qr_code"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/qr_code"
-        app:layout_constraintVertical_bias="0.829"
-        tools:text="Ac4879" />
+        app:layout_constraintVertical_bias="0.842"
+        tools:text="AC4879" />
 </androidx.constraintlayout.widget.ConstraintLayout>

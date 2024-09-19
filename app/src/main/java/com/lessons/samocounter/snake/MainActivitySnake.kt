@@ -1,4 +1,4 @@
-package com.lessons.samocounter
+package com.lessons.samocounter.snake
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,22 +10,40 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.lessons.samocounter.SnakeCore.gameSpeed
-import com.lessons.samocounter.SnakeCore.isPlay
-import com.lessons.samocounter.SnakeCore.startTheGame
+import com.lessons.samocounter.MainActivity
+import com.lessons.samocounter.R
+import com.lessons.samocounter.money.MoneyCount
+import com.lessons.samocounter.snake.SnakeCore.gameSpeed
+import com.lessons.samocounter.snake.SnakeCore.isPlay
+import com.lessons.samocounter.snake.SnakeCore.startTheGame
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.lang.RuntimeException
+import java.lang.StringBuilder
+import kotlin.also
+import kotlin.apply
+import kotlin.jvm.java
+import kotlin.let
+import kotlin.ranges.random
+import kotlin.ranges.until
+import kotlin.text.isEmpty
+import kotlin.text.toByteArray
+import kotlin.text.toInt
+import kotlin.text.trim
 
 const val HEAD_SIZE = 90
 const val CELLS_ON_FIELD = 12
 
 class MainActivitySnake : AppCompatActivity() {
     private lateinit var textViewSnakeSim: TextView
-    private lateinit var textViewSnakeMoney: TextView
+    private var topScore: Int = 0
 
     private  val allTale = mutableListOf<PartOfTale>()
     private val human by lazy {
         ImageView(this)
             .apply {
-                this.layoutParams = FrameLayout.LayoutParams(HEAD_SIZE,HEAD_SIZE)
+                this.layoutParams = FrameLayout.LayoutParams(HEAD_SIZE, HEAD_SIZE)
                 this.setImageResource(R.drawable.snake_scales)
 
             }
@@ -33,7 +51,7 @@ class MainActivitySnake : AppCompatActivity() {
     private val head by lazy {
         ImageView(this)
             .apply {
-                this.layoutParams = FrameLayout.LayoutParams(HEAD_SIZE,HEAD_SIZE)
+                this.layoutParams = FrameLayout.LayoutParams(HEAD_SIZE, HEAD_SIZE)
                 this.setImageResource(R.drawable.snake_head)
             }
     }
@@ -49,16 +67,17 @@ class MainActivitySnake : AppCompatActivity() {
         container = findViewById(R.id.container)
 
         textViewSnakeSim = findViewById(R.id.textView_snakeSim)
-        textViewSnakeMoney = findViewById(R.id.textView_snakeMoney)
         val ivArrowUp: ImageView = findViewById(R.id.ivArrowUp)
         val ivArrowRights: ImageView = findViewById(R.id.ivArrowRight)
         val ivArrowBottom: ImageView = findViewById(R.id.ivArrowBottom)
         val ivArrowLeft: ImageView = findViewById(R.id.ivArrowLeft)
         val ivPause: ImageView = findViewById(R.id.ivPause)
+        getTopScore()
 
 
 
-        container.layoutParams = LinearLayout.LayoutParams(HEAD_SIZE * CELLS_ON_FIELD, HEAD_SIZE * CELLS_ON_FIELD)
+        container.layoutParams =
+            LinearLayout.LayoutParams(HEAD_SIZE * CELLS_ON_FIELD, HEAD_SIZE * CELLS_ON_FIELD)
 
 
         startTheGame()
@@ -98,7 +117,7 @@ class MainActivitySnake : AppCompatActivity() {
 
     private fun generateNewHuman(){
         val viewCoordinate = generateHumanCoordinates()
-        human.setBackgroundColor(ContextCompat.getColor(this,R.color.whooshColor3_red))
+        human.setBackgroundColor(ContextCompat.getColor(this, R.color.whooshColor3_red))
         (human.layoutParams as FrameLayout.LayoutParams).topMargin = viewCoordinate.top
         (human.layoutParams as FrameLayout.LayoutParams).leftMargin = viewCoordinate.left
 
@@ -107,7 +126,7 @@ class MainActivitySnake : AppCompatActivity() {
 
     }
 
-    private fun generateHumanCoordinates():ViewCoordinate{
+    private fun generateHumanCoordinates(): ViewCoordinate {
         val viewCoordinate = ViewCoordinate(
             (0 until CELLS_ON_FIELD).random() * HEAD_SIZE,
             (0 until CELLS_ON_FIELD).random() * HEAD_SIZE
@@ -130,7 +149,6 @@ class MainActivitySnake : AppCompatActivity() {
             increaseDifficult()
 
             textViewSnakeSim.setText(allTale.size.toString())
-            textViewSnakeMoney.setText((allTale.size * 146).toString())
         }
     }
 
@@ -145,7 +163,7 @@ class MainActivitySnake : AppCompatActivity() {
 
     private fun addPartOfTale(top:Int, left:Int){
         val talePart = drawPartOfTale(top,left)
-        allTale.add(PartOfTale(ViewCoordinate(top,left), talePart))
+        allTale.add(PartOfTale(ViewCoordinate(top, left), talePart))
     }
 
     private fun drawPartOfTale(top: Int, left: Int): ImageView {
@@ -160,6 +178,7 @@ class MainActivitySnake : AppCompatActivity() {
     }
 
     fun move(directions: Directions){
+
         when(directions){
             Directions.UP -> moveHeadAndRotate(Directions.UP, 270f, -HEAD_SIZE)
             Directions.BOTTOM -> moveHeadAndRotate(Directions.BOTTOM, 90f, HEAD_SIZE)
@@ -167,6 +186,7 @@ class MainActivitySnake : AppCompatActivity() {
             Directions.RIGHT -> moveHeadAndRotate(Directions.RIGHT, 0f, HEAD_SIZE)
         }
         runOnUiThread {
+            checkSnakeInWall()
             if(checkIfSnakeSmash()){
                 isPlay = false
                 showScore()
@@ -180,7 +200,13 @@ class MainActivitySnake : AppCompatActivity() {
     }
 
     private fun moveHeadAndRotate(directions: Directions, angle:Float, coordinates: Int){
-        head.rotation = angle
+        if(angle == 180f){
+            head.setImageResource(R.drawable.snake_head_left)
+            head.rotation = 0f
+        } else {
+            head.setImageResource(R.drawable.snake_head)
+            head.rotation = angle
+        }
         when(directions){
             Directions.UP, Directions.BOTTOM -> {
                 (head.layoutParams as FrameLayout.LayoutParams).topMargin += coordinates
@@ -193,17 +219,11 @@ class MainActivitySnake : AppCompatActivity() {
     }
 
     private fun showScore() {
-        var sizeTale = allTale.size
-        var wordSim = " сэмиков"
-        if(sizeTale == 1 || sizeTale == 21 || sizeTale == 31 || sizeTale == 41 || sizeTale ==51){
-            wordSim = " сэмик"
-        } else if (sizeTale == 2 || sizeTale == 3 || sizeTale == 4 || sizeTale == 22 || sizeTale == 23 ||
-            sizeTale == 24 || sizeTale == 32 || sizeTale == 33 || sizeTale == 34 || sizeTale == 42 ||
-            sizeTale == 43 || sizeTale == 44 || sizeTale == 52 || sizeTale == 53 || sizeTale == 54){
-            wordSim = " сэмика"
-        }
+        val moneyCount = MoneyCount()
+        checkTopScore()
         AlertDialog.Builder(this)
-            .setTitle("Ты сделал " +sizeTale + wordSim + " и заработал ${allTale.size * 146} ₽")
+            .setTitle("Ты сделал ${allTale.size} ${checkWord(allTale.size)} и заработал ${moneyCount.moneyCount(allTale.size,false)} ₽")
+            .setMessage("Рекорд $topScore ${checkWord(topScore)} и ${moneyCount.moneyCount(topScore,false)} ₽")
             .setPositiveButton("Заново", {_, _ ->
                 this.recreate()
             })
@@ -212,16 +232,76 @@ class MainActivitySnake : AppCompatActivity() {
             .show()
     }
 
+
+
+    private fun checkWord(number: Int): String {
+        var wordSim = "сэмиков"
+
+        if(number == 1 || number == 21 || number == 31 || number == 41 || number ==51){
+            wordSim = "сэмик"
+        } else if (number == 2 || number == 3 || number == 4 || number == 22 || number == 23 ||
+            number == 24 || number == 32 || number == 33 || number == 34 || number == 42 ||
+            number == 43 || number == 44 || number == 52 || number == 53 || number == 54){
+            wordSim = "сэмика"
+        }
+        return wordSim
+    }
+
+    private fun checkTopScore() {
+        if(allTale.size > topScore) {
+            topScore = allTale.size
+
+            try {
+                val fileOutput = openFileOutput("topScore.txt", MODE_PRIVATE)
+                fileOutput.write(topScore.toString().toByteArray())
+                fileOutput.close()
+            } catch (e: IOException) {
+                throw RuntimeException(e)
+            }
+        }
+    }
+
+    fun getTopScore() {
+        try {
+            val fileOutput = openFileOutput("topScore.txt", MODE_APPEND)
+            fileOutput.close()
+            val fileInput = openFileInput("topScore.txt")
+            val reader = InputStreamReader(fileInput)
+            val bufferedReader = BufferedReader(reader)
+
+            val stringBuilder = StringBuilder()
+            var lines: String?
+            while (bufferedReader.readLine().also { lines = it } != null) {
+                stringBuilder.append(lines).append("")
+            }
+            val string = stringBuilder.toString()
+            if (string.isEmpty()) {
+
+            } else {
+                topScore = string.trim().toInt()
+            }
+        } catch (e: IOException) {
+            throw RuntimeException(e)
+        }
+    }
+
+    private fun checkSnakeInWall(){
+        if(head.top < 0){
+            (head.layoutParams as FrameLayout.LayoutParams).topMargin += HEAD_SIZE * CELLS_ON_FIELD + HEAD_SIZE
+        } else if (head.left < 0){
+            (head.layoutParams as FrameLayout.LayoutParams).leftMargin += HEAD_SIZE * CELLS_ON_FIELD + HEAD_SIZE
+        } else if (head.top >= HEAD_SIZE * CELLS_ON_FIELD){
+            (head.layoutParams as FrameLayout.LayoutParams).topMargin = 0
+        } else if (head.left >= HEAD_SIZE * CELLS_ON_FIELD){
+            (head.layoutParams as FrameLayout.LayoutParams).leftMargin = 0
+        }
+    }
+
     private fun checkIfSnakeSmash() : Boolean{
         for(talePart in allTale){
             if(talePart.viewCoordinate.left == head.left && talePart.viewCoordinate.top == head.top){
                 return true
             }
-        }
-        if(head.top < 0 || head.left < 0
-            || head.top >= HEAD_SIZE * CELLS_ON_FIELD
-            || head.left >= HEAD_SIZE * CELLS_ON_FIELD){
-            return true
         }
         return false
     }
@@ -233,11 +313,17 @@ class MainActivitySnake : AppCompatActivity() {
             container.removeView(talePart.imageView)
             if(index == 0){
                 tempaTalePart = talePart
-                allTale[index] = PartOfTale(ViewCoordinate(head.top, head.left), drawPartOfTale(head.top,head.left))
+                allTale[index] = PartOfTale(
+                    ViewCoordinate(head.top, head.left),
+                    drawPartOfTale(head.top, head.left)
+                )
             } else {
                 var anotherTempPartOfTale = allTale[index]
                 tempaTalePart?.let {
-                    allTale[index] = PartOfTale(it.viewCoordinate, drawPartOfTale(it.viewCoordinate.top, it.viewCoordinate.left))
+                    allTale[index] = PartOfTale(
+                        it.viewCoordinate,
+                        drawPartOfTale(it.viewCoordinate.top, it.viewCoordinate.left)
+                    )
                 }
                 tempaTalePart = anotherTempPartOfTale
             }

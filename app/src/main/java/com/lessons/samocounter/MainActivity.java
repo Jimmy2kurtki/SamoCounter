@@ -1,24 +1,41 @@
 package com.lessons.samocounter;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.lessons.samocounter.calendar.CalendarSim;
+import com.lessons.samocounter.DB.DBHelper;
+import com.lessons.samocounter.DB.Data;
+import com.lessons.samocounter.money.MoneyCount;
+import com.lessons.samocounter.qrsim.VremennoeReshenie;
+import com.lessons.samocounter.schedule.WorkScheduleActivity;
+import com.lessons.samocounter.snake.MainActivitySnake;
+import com.lessons.samocounter.money.Money;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -34,20 +51,23 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView textViewEasy, textViewNorm, textViewHard, textViewSumSim, money;
-    private Button buttonEasy, buttonNorm, buttonHard;
-    private ListView listView;
-    private int intTextViewEasy = 0, intTextViewNorm = 0, intTextViewHard = 0, intTextViewSumSim, intMoney;
-    private ArrayList<String> arrayListSim = new ArrayList<>();
     Date currentDate = new Date();
     DateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
     String dateText = dateFormat.format(currentDate);
     ArrayAdapter<String> adapter;
     DBHelper dbHelper;
+    SharedPreferences pref;
+    private TextView textViewEasy, textViewNorm, textViewHard, textViewSumSim, money;
+    private TextView buttonEasy, buttonNorm, buttonHard;
+    private ListView listView;
+    private int intTextViewEasy = 0, intTextViewNorm = 0, intTextViewHard = 0, intTextViewSumSim, intMoney;
+    private ArrayList<String> arrayListSim = new ArrayList<>();
     private long backPressedTime;
     private Toast backToast;
-    SharedPreferences pref;
-    private Button allButtonsForMethod;
+    private TextView allButtonsForMethod;
+    private androidx.appcompat.widget.Toolbar Toolbar;
+
+    MoneyCount moneyCount = new MoneyCount();
 
 
     @SuppressLint("MissingInflatedId")
@@ -55,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LeftMaterialDrawer();
 
         pref = getSharedPreferences("ID", MODE_PRIVATE);
 
@@ -85,24 +106,9 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
         getListView();
 
-        //нажатие на количество сэмов
-        textViewSumSim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                Intent intent = new Intent(MainActivity.this, CalendarSim.class);
-                startActivity(intent);finish();
-            }
-        });
-
-        money.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, VremennoeReshenie.class);
-                startActivity(intent);finish();
-            }
-        });
     }
+
     //лист с сэмами
     public void getListView() {
 
@@ -140,6 +146,115 @@ public class MainActivity extends AppCompatActivity {
         })
         ;
     }
+    @SuppressLint("ResourceAsColor")
+    private void LeftMaterialDrawer(){
+
+        PrimaryDrawerItem workSchedule = new  PrimaryDrawerItem().withIdentifier(7).withName("Work Schedule")
+                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
+        PrimaryDrawerItem calendar = new  PrimaryDrawerItem().withIdentifier(2).withName("Calendar")
+                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
+        PrimaryDrawerItem money = new  PrimaryDrawerItem().withIdentifier(3).withName("Money")
+                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
+        PrimaryDrawerItem generateQr = new  PrimaryDrawerItem().withIdentifier(5).withName("Generate QR")
+                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
+        PrimaryDrawerItem calculatorSim = new  PrimaryDrawerItem().withIdentifier(5).withName("Calculator SIM")
+                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
+        PrimaryDrawerItem dataTransfer = new  PrimaryDrawerItem().withIdentifier(6).withName("Data Transfer")
+                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
+        PrimaryDrawerItem snake = new  PrimaryDrawerItem().withIdentifier(4).withName("Snake")
+                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
+
+        Drawer result = new DrawerBuilder()
+                .withSelectedItem(-1)
+                .withActivity(this)
+                .withToolbar(Toolbar)
+                .addDrawerItems(
+                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
+                        workSchedule,
+                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
+                        calendar,
+                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
+                        money,
+                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
+                        generateQr,
+                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
+                        calculatorSim,
+                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
+                        dataTransfer,
+                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
+                        snake,
+                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem()
+                )
+                .build();
+
+        int color = Color.parseColor("#D18B00");
+        result.getDrawerLayout().setStatusBarBackgroundColor(color);
+        calendar.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+            @Override
+            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                Intent intent = new Intent(MainActivity.this, CalendarSim.class);
+                startActivity(intent);
+                finish();
+                return false;
+            }
+        });
+        workSchedule.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+            @Override
+            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                Intent intent = new Intent(MainActivity.this, WorkScheduleActivity.class);
+                startActivity(intent);
+                finish();
+                return false;
+            }
+        });
+        money.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+            @Override
+            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                Intent intent = new Intent(MainActivity.this, Money.class);
+                startActivity(intent);
+                finish();
+                return false;
+            }
+        });
+        snake.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+            @Override
+            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                Intent intent = new Intent(MainActivity.this, MainActivitySnake.class);
+                startActivity(intent);
+                finish();
+                return false;
+            }
+        });
+        generateQr.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+            @Override
+            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                Intent intent = new Intent(MainActivity.this, VremennoeReshenie.class);
+                startActivity(intent);
+                finish();
+                return false;
+            }
+        });
+        calculatorSim.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+            @Override
+            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                Intent intent = new Intent(MainActivity.this, Calculator.class);
+                startActivity(intent);
+                finish();
+                return false;
+            }
+        });
+        dataTransfer.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+            @Override
+            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                Intent intent = new Intent(MainActivity.this, DataTransfer.class);
+                startActivity(intent);
+                finish();
+                return false;
+            }
+        });
+    }
+
+
 
     //удаление сэма
     public void removeSim(String removeString, int i) {
@@ -159,19 +274,18 @@ public class MainActivity extends AppCompatActivity {
                 textViewHard.setText(String.valueOf(intTextViewHard));
             }
             intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-            money(intTextViewSumSim);
+            moneyCount.moneyCount(intTextViewSumSim,true);
+            money.setText(String.valueOf(moneyCount.moneyCount(intTextViewSumSim,true)));
             textViewSumSim.setText(String.valueOf(intTextViewSumSim));
-            dbHelper.DeleteOne(removeString);
+            dbHelper.deleteOne(removeString);
             arrayListSim.remove(i);
 
             saveCountSim();
         }
-
-
     }
 
     //подсчет и вывод колва сэмов на экран
-    public void setCountSim(@NonNull Button btn) {
+    public void setCountSim(@NonNull TextView btn) {
         if (btn.equals(buttonEasy)) {
             intTextViewEasy++;
             textViewEasy.setText(String.valueOf(intTextViewEasy));
@@ -183,7 +297,8 @@ public class MainActivity extends AppCompatActivity {
             textViewHard.setText(String.valueOf(intTextViewHard));
         }
         intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-        money(intTextViewSumSim);
+        moneyCount.moneyCount(intTextViewSumSim,true);
+        money.setText(String.valueOf(moneyCount.moneyCount(intTextViewSumSim,true)));
         textViewSumSim.setText(String.valueOf(intTextViewSumSim));
         saveCountSim();
     }
@@ -192,22 +307,23 @@ public class MainActivity extends AppCompatActivity {
     public void saveData(String numberSim, String strBtn) {
 
         Data data = new Data(numberSim, strBtn, dateText);
-        dbHelper.AddOne(data);
-
+        dbHelper.addOne(data);
     }
 
     //получение всех сэмов из бд
     public void getData() {
-        LinkedList<Data> list = dbHelper.GetAll();
+        LinkedList<Data> list = dbHelper.getAll();
         String text = "";
-        for(Data d:list) if (d.date.equals(dateText)) text = text + d.nameSim + " " + d.emh + " " + d.date +  "\n";
+        for (Data d : list)
+            if (d.date.equals(dateText))
+                text = text + d.nameSim + " " + d.emh + " " + d.date + "\n";
 
         if (text.isEmpty()) {
 
         } else {
             String[] arr = text.split("\n");
 
-            Collections.addAll(arrayListSim,arr);
+            Collections.addAll(arrayListSim, arr);
             Collections.reverse(arrayListSim);
             getListView();
         }
@@ -250,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                     intTextViewNorm = Integer.parseInt(arr[1]);
                     intTextViewHard = Integer.parseInt(arr[2]);
                     intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-                    money(intTextViewSumSim);
+                    moneyCount.moneyCount(intTextViewSumSim,true);
                     textViewSumSim.setText(String.valueOf(intTextViewSumSim));
 
                     textViewEasy.setText(String.valueOf(intTextViewEasy));
@@ -261,25 +377,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        money(intTextViewSumSim);
+        moneyCount.moneyCount(intTextViewSumSim,true);
+        money.setText(String.valueOf(moneyCount.moneyCount(intTextViewSumSim,true)));
     }
 
-    //подсчет денег за сэмы
-    public void money(int intTextViewSumSim) {
-        if (intTextViewSumSim <= 23) {
-            intMoney = intTextViewSumSim * 146;
-        } else if (intTextViewSumSim <= 30) {
-            intMoney = ((intTextViewSumSim - 23) * 190) + (23 * 146);
-        } else if (intTextViewSumSim <= 33) {
-            intMoney = (7 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 7) * 210);
-        } else {
-            intMoney = (3 * 210) + (7 * 190) + (23 * 146) + ((intTextViewSumSim - 23 - 7 - 3) * 230);
-        }
-        money.setText(String.valueOf(intMoney));
-    }
 
     //добавление номера сэма в список
-    public void setNumberSim(String numberSim, Button btn){
+    public void setNumberSim(String numberSim, TextView btn) {
         numberSim = numberSim.toUpperCase();
         numberSim = numberSim.replaceAll("\\s+", "");
         numberSim = numberSim.replaceAll("EASY", "");
@@ -305,15 +409,15 @@ public class MainActivity extends AppCompatActivity {
         saveData(numberSim, strBtn);
     }
 
-    public void prefireTouchListener(Button b){
+    public void prefireTouchListener(TextView b) {
         View v = (View) b;
         touchListener(v);
     }
 
     //слушатели кнопок
     @SuppressLint("ClickableViewAccessibility")
-    public void touchListener(View v){
-        Button b = (Button) v;
+    public void touchListener(View v) {
+        TextView b = (TextView) v;
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -330,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //номер сэма текстом
-    private void customDialog(Button btn) {
+    private void customDialog(TextView btn) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog, null);
         builder.setCancelable(false)
@@ -353,7 +457,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //номер сэма QRкодом
-    public void clickScanner(Button b){
+    public void clickScanner(TextView b) {
         IntentIntegrator intentIntegrator = new IntentIntegrator(MainActivity.this);
         intentIntegrator.setOrientationLocked(true);
         intentIntegrator.setPrompt("Scan a QR code");
@@ -366,20 +470,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
-        if(intentResult != null){
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (intentResult != null) {
             String contents = intentResult.getContents();
-            if (contents != null){
-                contents = contents.replaceAll("\\\\", "");
+            if (contents != null) {
                 contents = contents.replaceAll("https://wsh.bike\\?s=", "");
                 contents = contents.replaceAll("https", "");
                 contents = contents.replaceAll("//wsh.bike\\?s=", "");
                 contents = contents.replaceAll("//wsh", "");
                 contents = contents.replaceAll(".bike\\?s=", "");
                 contents = contents.replaceAll("s=", "");
-                setNumberSim(contents,allButtonsForMethod);
+                contents = contents.replaceAll(":", "");
+                contents = contents.replaceAll("\\\\", "");
+                contents = contents.replaceAll(".BIKE/\\?", "");
+                setNumberSim(contents, allButtonsForMethod);
             }
-        }else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
 
@@ -388,12 +494,12 @@ public class MainActivity extends AppCompatActivity {
     //кнопка назад
     public void onBackPressed() {
 
-        if(backPressedTime + 2000 > System.currentTimeMillis()){
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
             backToast.cancel();
             super.onBackPressed();
             return;
-        }else {
-            backToast = Toast.makeText(getBaseContext(),"Нажмите еще раз, что бы выйти",Toast.LENGTH_SHORT);
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Нажмите еще раз, что бы выйти", Toast.LENGTH_SHORT);
             backToast.show();
         }
         backPressedTime = System.currentTimeMillis();
