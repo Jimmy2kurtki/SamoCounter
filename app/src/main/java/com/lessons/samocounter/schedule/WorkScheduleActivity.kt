@@ -1,5 +1,6 @@
 package com.lessons.samocounter.schedule
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -8,11 +9,16 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.lessons.samocounter.MOUNTH
+import com.lessons.samocounter.MainActivity
 import com.lessons.samocounter.R
 import com.lessons.samocounter.VariableData
 import com.lessons.samocounter.databinding.ActivityScheduleBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class WorkScheduleActivity : AppCompatActivity() {
+
 
     lateinit var binding: ActivityScheduleBinding
     private val adapterRv = ScheduleAdapter()
@@ -44,7 +50,7 @@ class WorkScheduleActivity : AppCompatActivity() {
 
     private fun init(list:MutableList<Day>){
         binding.apply {
-            rvSchedule.layoutManager = GridLayoutManager(this@WorkScheduleActivity, 3)
+            rvSchedule.layoutManager = GridLayoutManager(this@WorkScheduleActivity, 6)
             rvSchedule.adapter = adapterRv
             adapterRv.addList(list)
         }
@@ -60,9 +66,19 @@ class WorkScheduleActivity : AppCompatActivity() {
             else if(i==1) img = R.drawable.work8
             else img = R.drawable.work10
 
-            val day = Day(img, "${list.indexOf(i)+1} $MOUNTH", i)
+            val day = Day(img, i)
             mutableList.add(day)
         }
         return mutableList
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        try {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } catch (e: Exception) {
+            // Handle exception if needed
+        }
     }
 }

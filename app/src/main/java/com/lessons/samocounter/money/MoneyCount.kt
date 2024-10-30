@@ -5,12 +5,12 @@ class MoneyCount {
         var count = c
         if(pochasovka) {
             if(count < 23) {
-                count = 22
+                count = 23
             }
         }
         var intMoney: Int = 0
         when {
-            count <= 22 -> intMoney = count * 146
+            count <= 23 -> intMoney = count * 146
             count <= 30 -> intMoney = (count - 23) * 190 + 23.times(146)
             count <= 33 -> intMoney = 7.times(190) + 23.times(146) + (count - 23 - 7).times(210)
             else -> intMoney = 3.times(210) + 7.times(190) + 23.times(146) + (count - 23 - 7 - 3).times(230)

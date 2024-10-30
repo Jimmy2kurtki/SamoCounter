@@ -5,8 +5,8 @@
     android:id="@+id/textView_sim_at_dates"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@color/whooshColor1_orange">
+    android:background="@color/fon"
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="@drawable/circle"
-            android:backgroundTint="@color/whooshColor2_white"
+            android:backgroundTint="@color/whooshColor1_orange"
             android:fontFamily="@font/audiowide"
             android:gravity="center"
             android:insetTop="0dp"
@@ -82,7 +82,7 @@
         android:layout_height="50dp"
         android:fontFamily="@font/audiowide"
         android:textAlignment="center"
-        android:textColor="@color/whooshColor2_white"
+        android:textColor="@color/whooshColor1_orange"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"

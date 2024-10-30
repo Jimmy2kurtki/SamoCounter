@@ -2,6 +2,7 @@ package com.lessons.samocounter.qrsim
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -17,6 +18,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import com.lessons.samocounter.MainActivity
 import com.lessons.samocounter.R
 import java.io.File
 import java.io.FileOutputStream
@@ -47,7 +49,7 @@ class VremennoeReshenie : AppCompatActivity() {
                 val bitmap = barcodeEncoder.createBitmap(bitMatrix)
 
                 imageViewVR.setImageBitmap(bitmap)
-                saveImage(bitmap)
+                //saveImage(bitmap)
                 textViewVR.text = adresSim
             } catch (e: WriterException) {
                 throw RuntimeException(e)
@@ -84,5 +86,15 @@ class VremennoeReshenie : AppCompatActivity() {
         }
 
         return fos?.use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) } ?: false
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        try {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } catch (e: Exception) {
+            // Handle exception if needed
+        }
     }
 }

@@ -157,10 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
         PrimaryDrawerItem generateQr = new  PrimaryDrawerItem().withIdentifier(5).withName("Generate QR")
                 .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
-        PrimaryDrawerItem calculatorSim = new  PrimaryDrawerItem().withIdentifier(5).withName("Calculator SIM")
-                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
-        PrimaryDrawerItem dataTransfer = new  PrimaryDrawerItem().withIdentifier(6).withName("Data Transfer")
-                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
+
         PrimaryDrawerItem snake = new  PrimaryDrawerItem().withIdentifier(4).withName("Snake")
                 .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
 
@@ -178,16 +175,12 @@ public class MainActivity extends AppCompatActivity {
                         new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
                         generateQr,
                         new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
-                        calculatorSim,
-                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
-                        dataTransfer,
-                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
                         snake,
                         new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem()
                 )
                 .build();
 
-        int color = Color.parseColor("#D18B00");
+        int color = Color.parseColor("#505963");
         result.getDrawerLayout().setStatusBarBackgroundColor(color);
         calendar.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
             @Override
@@ -234,27 +227,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        calculatorSim.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-            @Override
-            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                Intent intent = new Intent(MainActivity.this, Calculator.class);
-                startActivity(intent);
-                finish();
-                return false;
-            }
-        });
-        dataTransfer.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-            @Override
-            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                Intent intent = new Intent(MainActivity.this, DataTransfer.class);
-                startActivity(intent);
-                finish();
-                return false;
-            }
-        });
+
     }
-
-
 
     //удаление сэма
     public void removeSim(String removeString, int i) {
@@ -474,6 +448,7 @@ public class MainActivity extends AppCompatActivity {
         if (intentResult != null) {
             String contents = intentResult.getContents();
             if (contents != null) {
+                contents = contents.replaceAll("https://wsh.bike/\\?s=", "");
                 contents = contents.replaceAll("https://wsh.bike\\?s=", "");
                 contents = contents.replaceAll("https", "");
                 contents = contents.replaceAll("//wsh.bike\\?s=", "");
@@ -482,7 +457,7 @@ public class MainActivity extends AppCompatActivity {
                 contents = contents.replaceAll("s=", "");
                 contents = contents.replaceAll(":", "");
                 contents = contents.replaceAll("\\\\", "");
-                contents = contents.replaceAll(".BIKE/\\?", "");
+                contents = contents.replaceAll("BIKE/\\?", "");
                 setNumberSim(contents, allButtonsForMethod);
             }
         } else {

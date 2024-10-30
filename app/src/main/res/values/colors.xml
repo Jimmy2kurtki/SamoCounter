@@ -8,7 +8,9 @@
     <color name="whooshColor2_white">#fefefe</color>
     <color name="whooshColor3_red">#fe6d2b</color>
     <color name="whooshColor4_grey">#505963</color>
-    <color name="sb">#D18B00</color>
+    <color name="whooshColor6_orange_dark">#D18B00</color>
+    <color name = "fon">#fefefe</color>
+    <color name="sb">#505963</color>
     <color name="whooshColor5_grey">#e0e0e0</color>
     <!-- Material DEFAULT colors -->
     <color name="material_drawer_primary">#2196F3</color>

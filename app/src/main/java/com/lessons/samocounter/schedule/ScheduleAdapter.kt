@@ -1,32 +1,50 @@
 package com.lessons.samocounter.schedule
 
+import android.R
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.lessons.samocounter.MOUNTH
 import com.lessons.samocounter.VariableData
 import com.lessons.samocounter.databinding.SingleElementBinding
+import com.mikepenz.materialize.color.Material
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
+
 
     var rvList = mutableListOf<Day>()
 
     //заполняет разметку 2
     class ScheduleHolder(item: View): RecyclerView.ViewHolder(item ){
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd.MM", Locale.getDefault())
+        val dateText = dateFormat.format(currentDate)
 
         val binding = SingleElementBinding.bind(item)
 
         fun bind(day: Day,position: Int) = with(binding){
-            tvDay.text = "${position+1} $MOUNTH"
-            im.setImageResource(day.img)
+            var posInt = position+1
+            var posString: String
+            if (posInt < 10) posString = "0$posInt"
+            else posString = "$posInt"
+            tvDay.text = posString + MOUNTH
+            if(dateText == posString + MOUNTH) tvDay.setTextColor(tvDay.getContext().getColor(R.color.holo_red_light))
+
 
 
             if(day.working == 0){
                 tvWorkOrWeekend.text =  "Weekend"
+                val backgroundColor: Int = ContextCompat.getColor(tvDay.getContext(),R.color.holo_orange_dark)
+                bgcolor.setBackgroundColor(backgroundColor)
             } else if(day.working == 1){
-                tvWorkOrWeekend.text =  "At 8:00"
+                tvWorkOrWeekend.text =  "Work"
             } else{
                 tvWorkOrWeekend.text = "At 10:00"
             }
