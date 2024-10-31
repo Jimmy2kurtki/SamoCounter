@@ -18,7 +18,6 @@ import java.util.Locale
 
 class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
 
-
     var rvList = mutableListOf<Day>()
 
     //заполняет разметку 2
@@ -37,14 +36,15 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
             tvDay.text = posString + MOUNTH
             if(dateText == posString + MOUNTH) tvDay.setTextColor(tvDay.getContext().getColor(R.color.holo_red_light))
 
-
-
             if(day.working == 0){
                 tvWorkOrWeekend.text =  "Weekend"
                 val backgroundColor: Int = ContextCompat.getColor(tvDay.getContext(),R.color.holo_orange_dark)
                 bgcolor.setBackgroundColor(backgroundColor)
             } else if(day.working == 1){
                 tvWorkOrWeekend.text =  "Work"
+                cvcolor.setOnClickListener{
+
+                }
             } else{
                 tvWorkOrWeekend.text = "At 10:00"
             }
@@ -72,5 +72,4 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
         rvList.addAll(list)
         notifyDataSetChanged()
     }
-
 }

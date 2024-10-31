@@ -18,6 +18,9 @@ const val VOLODYA = "Сичькарь В"
 
 const val MOUNTH = ".11"
 
+const val KEY_SELECT = "selectedWorker"
+const val NAME_PREF_SELECT_SPINNER = "SelectedWorker"
+
 class VariableData{
     private val imageIdList = listOf(
         R.drawable.weekend,

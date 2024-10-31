@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
     MoneyCount moneyCount = new MoneyCount();
 
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,19 +76,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         LeftMaterialDrawer();
 
-        pref = getSharedPreferences("ID", MODE_PRIVATE);
-
-        dbHelper = new DBHelper(this);
-
-        money = findViewById(R.id.money);
-        textViewEasy = findViewById(R.id.textView_easy);
-        textViewNorm = findViewById(R.id.textView_norm);
-        textViewHard = findViewById(R.id.textView_hard);
-        textViewSumSim = findViewById(R.id.textView_sumSim);
-        buttonEasy = findViewById(R.id.button_easy);
-        buttonNorm = findViewById(R.id.button_norm);
-        buttonHard = findViewById(R.id.button_hard);
-        listView = findViewById(R.id.listView);
+        initAll();
 
         //решение проблемы со слушателем (нужно было 2 раза нажать)
         prefireTouchListener(buttonEasy);
@@ -106,7 +93,22 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
         getListView();
 
+    }
 
+    public void initAll(){
+        pref = getSharedPreferences("ID", MODE_PRIVATE);
+
+        dbHelper = new DBHelper(this);
+
+        money = findViewById(R.id.money);
+        textViewEasy = findViewById(R.id.textView_easy);
+        textViewNorm = findViewById(R.id.textView_norm);
+        textViewHard = findViewById(R.id.textView_hard);
+        textViewSumSim = findViewById(R.id.textView_sumSim);
+        buttonEasy = findViewById(R.id.button_easy);
+        buttonNorm = findViewById(R.id.button_norm);
+        buttonHard = findViewById(R.id.button_hard);
+        listView = findViewById(R.id.listView);
     }
 
     //лист с сэмами
