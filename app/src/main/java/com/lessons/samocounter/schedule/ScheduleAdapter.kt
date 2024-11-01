@@ -2,7 +2,6 @@ package com.lessons.samocounter.schedule
 
 import android.R
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lessons.samocounter.MOUNTH
 import com.lessons.samocounter.VariableData
 import com.lessons.samocounter.databinding.SingleElementBinding
-import com.mikepenz.materialize.color.Material
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -19,9 +17,10 @@ import java.util.Locale
 class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
 
     var rvList = mutableListOf<Day>()
+    val variableData = VariableData()
 
     //заполняет разметку 2
-    class ScheduleHolder(item: View): RecyclerView.ViewHolder(item ){
+    class ScheduleHolder(item: View, parent: ViewGroup): RecyclerView.ViewHolder(item ){
         val currentDate = Date()
         val dateFormat = SimpleDateFormat("dd.MM", Locale.getDefault())
         val dateText = dateFormat.format(currentDate)
@@ -43,7 +42,8 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
             } else if(day.working == 1){
                 tvWorkOrWeekend.text =  "Work"
                 cvcolor.setOnClickListener{
-
+                    val myAlertDialog = MyAlertDialog()
+                    myAlertDialog.alertDialogShift(position, tvDay)
                 }
             } else{
                 tvWorkOrWeekend.text = "At 10:00"
@@ -55,7 +55,7 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleHolder {
         val variableData = VariableData()
         val view = LayoutInflater.from(parent.context).inflate(variableData.singleElement,parent,false)
-        return ScheduleHolder(view)
+        return ScheduleHolder(view, parent)
     }
 
     override fun onBindViewHolder(holder: ScheduleHolder, position: Int) {
@@ -72,4 +72,6 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
         rvList.addAll(list)
         notifyDataSetChanged()
     }
+
+
 }

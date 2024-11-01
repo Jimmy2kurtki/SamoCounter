@@ -136,6 +136,7 @@ public class Money extends AppCompatActivity {
 
             }
         });
+        spinnerFinishDate.setSelection(arrayListForSpinnerFinish.size()-1);
 
     }
 
