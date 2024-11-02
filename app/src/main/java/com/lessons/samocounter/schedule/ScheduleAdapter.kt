@@ -33,7 +33,10 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
             if (posInt < 10) posString = "0$posInt"
             else posString = "$posInt"
             tvDay.text = posString + MOUNTH
-            if(dateText == posString + MOUNTH) tvDay.setTextColor(tvDay.getContext().getColor(R.color.holo_red_light))
+            if(dateText == posString + MOUNTH) {
+                tvDay.setTextColor(tvDay.getContext().getColor(R.color.holo_red_light))
+                tvWorkOrWeekend.setTextColor(tvDay.getContext().getColor(R.color.holo_red_dark))
+            }
 
             if(day.working == 0){
                 tvWorkOrWeekend.text =  "Walk"

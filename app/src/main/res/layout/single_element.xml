@@ -34,8 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
                 android:text="at 8:00"
@@ -44,17 +43,23 @@
                 android:textStyle="italic"
                 app:layout_constraintTop_toBottomOf="@+id/ivDay" />
 
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/dialog_holo_light_frame" />
+
             <TextView
                 android:id="@+id/tvDay"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
 
                 android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="15dp"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
                 android:text="25.09"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
