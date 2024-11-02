@@ -36,7 +36,7 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
             if(dateText == posString + MOUNTH) tvDay.setTextColor(tvDay.getContext().getColor(R.color.holo_red_light))
 
             if(day.working == 0){
-                tvWorkOrWeekend.text =  "Weekend"
+                tvWorkOrWeekend.text =  "Walk"
                 val backgroundColor: Int = ContextCompat.getColor(tvDay.getContext(),R.color.holo_orange_dark)
                 bgcolor.setBackgroundColor(backgroundColor)
             } else if(day.working == 1){

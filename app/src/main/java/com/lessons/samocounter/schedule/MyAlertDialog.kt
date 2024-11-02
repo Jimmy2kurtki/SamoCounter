@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import com.lessons.samocounter.MOUNTH
 import com.lessons.samocounter.VariableData
 
 class MyAlertDialog {
@@ -23,7 +24,9 @@ class MyAlertDialog {
             stringBuilder.append(arrayNamesShift[i]).append("\n")
         }
         val string: String = stringBuilder.toString()
-        AlertDialog.Builder(parent.context).setTitle("Подмениться с").setMessage(string).create().show()
+        var positoinString: String = (position+1).toString()
+        if (position < 9) positoinString = "0$positoinString"
+        AlertDialog.Builder(parent.context).setTitle("Подмениться $positoinString${MOUNTH} с...").setMessage(string).create().show()
     }
 
     fun changeOfShift(position: Int): MutableList<Int>{
