@@ -1,4 +1,4 @@
-package com.lessons.samocounter.DB;
+package com.lessons.samocounter;
 
 public class Data {
     public String nameSim, emh, date;

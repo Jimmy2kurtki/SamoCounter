@@ -9,15 +9,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.lessons.samocounter.MOUNTH
 import com.lessons.samocounter.VariableData
-import com.lessons.samocounter.databinding.SingleElementBinding
+import com.lessons.samocounter.databinding.ElementRvScheduleBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
 
-    var rvList = mutableListOf<Day>()
-    val variableData = VariableData()
+    private var rvList = mutableListOf<Day>()
 
     //заполняет разметку 2
     class ScheduleHolder(item: View, parent: ViewGroup): RecyclerView.ViewHolder(item ){
@@ -25,15 +24,15 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
         val dateFormat = SimpleDateFormat("dd.MM", Locale.getDefault())
         val dateText = dateFormat.format(currentDate)
 
-        val binding = SingleElementBinding.bind(item)
+        val binding = ElementRvScheduleBinding.bind(item)
 
         fun bind(day: Day,position: Int) = with(binding){
             var posInt = position+1
             var posString: String
             if (posInt < 10) posString = "0$posInt"
             else posString = "$posInt"
-            tvDay.text = posString + MOUNTH
-            if(dateText == posString + MOUNTH) {
+            tvDay.text = posString + "." + MOUNTH
+            if(dateText == posString + "." + MOUNTH) {
                 tvDay.setTextColor(tvDay.getContext().getColor(R.color.holo_red_light))
                 tvWorkOrWeekend.setTextColor(tvDay.getContext().getColor(R.color.holo_red_dark))
             }
@@ -44,9 +43,12 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
                 bgcolor.setBackgroundColor(backgroundColor)
             } else if(day.working == 1){
                 tvWorkOrWeekend.text =  "Work"
-                cvcolor.setOnClickListener{
-                    val myAlertDialog = MyAlertDialog()
-                    myAlertDialog.alertDialogShift(position, tvDay)
+                val dateTextInt = dateText.split(".")
+                if(posInt >= dateTextInt[0].toInt()) {
+                    cvcolor.setOnClickListener {
+                        val myAlertDialog = MyAlertDialog()
+                        myAlertDialog.alertDialogShift(position, tvDay)
+                    }
                 }
             } else{
                 tvWorkOrWeekend.text = "At 10:00"
@@ -75,6 +77,4 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>() {
         rvList.addAll(list)
         notifyDataSetChanged()
     }
-
-
 }

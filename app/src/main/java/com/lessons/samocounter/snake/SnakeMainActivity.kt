@@ -10,9 +10,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.lessons.samocounter.MainActivity
+import com.lessons.samocounter.main.MainActivity
 import com.lessons.samocounter.R
-import com.lessons.samocounter.money.MoneyCount
+import com.lessons.samocounter.MoneyCount
 import com.lessons.samocounter.snake.SnakeCore.gameSpeed
 import com.lessons.samocounter.snake.SnakeCore.isPlay
 import com.lessons.samocounter.snake.SnakeCore.startTheGame

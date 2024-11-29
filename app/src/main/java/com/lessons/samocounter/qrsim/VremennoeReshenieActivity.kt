@@ -18,14 +18,14 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import com.lessons.samocounter.MainActivity
+import com.lessons.samocounter.main.MainActivity
 import com.lessons.samocounter.R
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 
-class VremennoeReshenie : AppCompatActivity() {
+class VremennoeReshenieActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

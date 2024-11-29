@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
+        <item>@font/</item>
+        <item>@font/anta</item>
         <item>@font/archivo_black</item>
         <item>@font/audiowide</item>
         <item>@font/bakbak_one</item>
+        <item>@font/concert_one</item>
+        <item>@font/hanalei_fill</item>
+        <item>@font/moul</item>
+        <item>@font/potta_one</item>
+        <item>@font/protest_strike</item>
+        <item>@font/reggae_one</item>
+        <item>@font/slackey</item>
+        <item>@font/stalinist_one</item>
+        <item>@font/suez_one</item>
+        <item>@font/supermercado_one</item>
+        <item>@font/tektur</item>
+        <item>@font/tektur_bold</item>
+        <item>@font/tektur_extrabold</item>
+        <item>@font/tektur_semibold</item>
+        <item>@font/tilt_warp</item>
+        <item>@font/vast_shadow</item>
+        <item>@font/wendy_one</item>
     </array>
 </resources>

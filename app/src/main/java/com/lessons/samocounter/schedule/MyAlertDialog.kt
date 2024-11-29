@@ -1,15 +1,14 @@
 package com.lessons.samocounter.schedule
 
-import android.content.Context
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import com.lessons.samocounter.MOUNTH
 import com.lessons.samocounter.VariableData
 
 class MyAlertDialog {
 
-    val variableData = VariableData()
+    private val variableData = VariableData()
+
     fun alertDialogShift(position: Int, parent: View){
         val arrayNamesShift = mutableListOf<String>()
         for(i in 0..11){
@@ -19,6 +18,7 @@ class MyAlertDialog {
                 }
             }
         }
+
         val stringBuilder = StringBuilder()
         for (i in 0..arrayNamesShift.size-1) {
             stringBuilder.append(arrayNamesShift[i]).append("\n")
@@ -26,7 +26,8 @@ class MyAlertDialog {
         val string: String = stringBuilder.toString()
         var positoinString: String = (position+1).toString()
         if (position < 9) positoinString = "0$positoinString"
-        AlertDialog.Builder(parent.context).setTitle("Подмениться $positoinString${MOUNTH} с...").setMessage(string).create().show()
+        AlertDialog.Builder(parent.context).setTitle("Подмениться $positoinString.${MOUNTH} с...")
+            .setMessage(string).create().show()
     }
 
     fun changeOfShift(position: Int): MutableList<Int>{

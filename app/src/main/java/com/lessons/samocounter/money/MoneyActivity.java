@@ -10,62 +10,38 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.lessons.samocounter.DB.DBHelper;
-import com.lessons.samocounter.DB.Data;
-import com.lessons.samocounter.MainActivity;
+import com.lessons.samocounter.DBHelper;
+import com.lessons.samocounter.Data;
+import com.lessons.samocounter.MoneyCount;
+import com.lessons.samocounter.main.MainActivity;
 import com.lessons.samocounter.R;
+import com.lessons.samocounter.VariableData;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.Locale;
 import java.util.Set;
 
-public class Money extends AppCompatActivity {
+public class MoneyActivity extends AppCompatActivity {
 
-    Date currentDate = new Date();
-    DateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
-    String dateText = dateFormat.format(currentDate);
+    private final VariableData variableData = new VariableData();
+    private DBHelper dbHelper; //БДшка
 
-    DBHelper dbHelper; //БДшка
+    private final ArrayList<String> arrayListSim = new ArrayList<>(); //список всех сэмов
 
-    ArrayList<String> arrayListSim = new ArrayList<>(); //список всех сэмов
+    private final ArrayList<String> arrayListForSpinnerStart = new ArrayList<>();  //список дат для спиннера левого
 
-    ArrayList<String> arrayListForSpinnerStart = new ArrayList<>();  //список дат для спиннера левого
+    private final ArrayList<String> arrayListForSpinnerFinish = new ArrayList<>();  //список дат для спиннера правого
 
-    ArrayList<String> arrayListForSpinnerFinish = new ArrayList<>();  //список дат для спиннера правого
+    private TextView textViewMoneyAtDates, textViewMoneyPerDay, textViewSimAtDates, textViewSimPerDay;
 
-    ArrayAdapter<String> adapterSpinnerSimStart;//адаптер для спиннера левого
+    private String startDate;
 
-    ArrayAdapter<String> adapterSpinnerSimFinish;//адаптер для спиннера правого
+    private String finishDate = variableData.getDateText();
 
-    TextView textViewMoneyAtDates, textViewMoneyPerDay, textViewSimAtDates, textViewSimPerDay;
-
-    Spinner spinnerStartDate, spinnerFinishDate;
-
-    String startDate;
-
-    String finishDate = dateText;
-
-    int indexDataStart;
-
-    int indexDataFinish;
-
-    int totalMoney;
-
-    int moneyPerDay;
-
-    int totalSim;
-
-    int simPerDay;
-
-    int indexStart = 0;
-    int indexFinish = 0;
+    private int indexDataStart, indexDataFinish, totalMoney, moneyPerDay, totalSim, simPerDay, indexStart, indexFinish;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -82,14 +58,16 @@ public class Money extends AppCompatActivity {
 
         getData();
 
-        adapterSpinnerSimStart = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arrayListForSpinnerStart);
+        //адаптер для спиннера левого
+        ArrayAdapter<String> adapterSpinnerSimStart = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arrayListForSpinnerStart);
         adapterSpinnerSimStart.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerStartDate = findViewById(R.id.spinner_start_date);
+        Spinner spinnerStartDate = findViewById(R.id.spinner_start_date);
         spinnerStartDate.setAdapter(adapterSpinnerSimStart);
 
-        adapterSpinnerSimFinish = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arrayListForSpinnerFinish);
+        //адаптер для спиннера правого
+        ArrayAdapter<String> adapterSpinnerSimFinish = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arrayListForSpinnerFinish);
         adapterSpinnerSimFinish.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFinishDate = findViewById(R.id.spinner_finish_date);
+        Spinner spinnerFinishDate = findViewById(R.id.spinner_finish_date);
         spinnerFinishDate.setAdapter(adapterSpinnerSimFinish);
 
         //обработка выбора в спиннере левом
@@ -268,16 +246,7 @@ public class Money extends AppCompatActivity {
         arrayListForSpinnerFinish.addAll(arrayListForSpinnerStart);
     }
 
-    public void onBackPressed() {
-        super.onBackPressed();
-        try {
-            Intent intent = new Intent(Money.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        } catch (Exception e) {
 
-        }
-    }
 
     void setStartDate(int i) {
         startDate = arrayListForSpinnerStart.get(i);
@@ -305,6 +274,17 @@ public class Money extends AppCompatActivity {
 
     public int getIndexDataFinish() {
         return indexDataFinish;
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        try {
+            Intent intent = new Intent(MoneyActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } catch (Exception e) {
+
+        }
     }
 
 }

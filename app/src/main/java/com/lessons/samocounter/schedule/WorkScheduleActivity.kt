@@ -7,43 +7,39 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.lessons.samocounter.KEY_SELECT
-import com.lessons.samocounter.MOUNTH
-import com.lessons.samocounter.MainActivity
+import com.lessons.samocounter.main.MainActivity
 import com.lessons.samocounter.R
 import com.lessons.samocounter.VariableData
 import com.lessons.samocounter.databinding.ActivityScheduleBinding
 import com.lessons.samocounter.NAME_PREF_SELECT_SPINNER
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.lessons.samocounter.schedule.calendar.CalendarActivity
 
 class WorkScheduleActivity : AppCompatActivity() {
 
-    var selectedWorker: Int = 0
-    lateinit var binding: ActivityScheduleBinding
-    private val adapterRv = ScheduleAdapter()
+    private lateinit var spinner: Spinner
+    private lateinit var btnCalendar: TextView
     private lateinit var pref: SharedPreferences
-    lateinit var spinner: Spinner
+    private lateinit var binding: ActivityScheduleBinding
+
+    private val variableData = VariableData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScheduleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        pref = getSharedPreferences(NAME_PREF_SELECT_SPINNER, MODE_PRIVATE)
-        selectedWorker = pref.getInt(KEY_SELECT,0)
+        initAll()
 
-        val variableData = VariableData()
-
-        val adapterSpinner = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, variableData.getNameWorkers())
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        spinner = findViewById(R.id.spinnerSchedule)
-        spinner.adapter = adapterSpinner
-        spinner.setSelection(selectedWorker)
+        btnCalendar.setOnClickListener{
+            editPref()
+            val intent = Intent(this, CalendarActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -55,9 +51,25 @@ class WorkScheduleActivity : AppCompatActivity() {
 
             }
         }
+
+    }
+
+    private fun initAll(){
+
+        pref = getSharedPreferences(NAME_PREF_SELECT_SPINNER, MODE_PRIVATE)
+        val selectedWorker = pref.getInt(KEY_SELECT,0)
+        val adapterSpinner = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, variableData.getNameWorkers())
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner = findViewById(R.id.spinnerSchedule)
+        spinner.adapter = adapterSpinner
+        spinner.setSelection(selectedWorker)
+
+        btnCalendar = findViewById(R.id.btnCalendar)
     }
 
     private fun init(list:MutableList<Day>){
+
+        val adapterRv = ScheduleAdapter()
 
         binding.apply {
             rvSchedule.layoutManager = GridLayoutManager(this@WorkScheduleActivity, 6)
@@ -66,7 +78,7 @@ class WorkScheduleActivity : AppCompatActivity() {
         }
     }
 
-    fun createDaysList(list: IntArray): MutableList<Day>{
+    private fun createDaysList(list: IntArray): MutableList<Day>{
         var mutableList = mutableListOf<Day>()
         for(i in list){
             var img:Int
@@ -81,18 +93,23 @@ class WorkScheduleActivity : AppCompatActivity() {
         }
         return mutableList
     }
-    override fun onBackPressed() {
-        super.onBackPressed()
-//тут
+
+    private fun editPref(){
         val edit: SharedPreferences.Editor = pref.edit()
         edit.putInt(KEY_SELECT,spinner.selectedItemPosition)
         edit.apply()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        editPref()
+
         try {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         } catch (e: Exception) {
-            // Handle exception if needed
         }
     }
 }

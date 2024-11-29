@@ -1,4 +1,4 @@
-package com.lessons.samocounter.DB;
+package com.lessons.samocounter;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,7 +16,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_NAMESIM = "COLUMN_NAMESIM";
     private static final String COLUMN_EMH = "COLUMN_EMH";
     private static final String COLUMN_DATE = "COLUMN_DATE";
-    private static final String _ID = "_ID";
 
     public DBHelper(@Nullable Context context) {
         super(context, "example.db", null, 1);

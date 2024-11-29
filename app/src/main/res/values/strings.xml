@@ -5,6 +5,8 @@
     <string name="hard">HARD</string>
     <string name="scooter_number">SCOOTER NUMBER</string>
     <string name="delete">DELETE?</string>
+    <string name="open_drawer">Открыть ящик</string>
+    <string name="close_drawer">Закрыть ящик</string>
 
 
 </resources>

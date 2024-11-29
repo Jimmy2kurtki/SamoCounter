@@ -1,12 +1,10 @@
-package com.lessons.samocounter.money
+package com.lessons.samocounter
 
 class MoneyCount {
     fun moneyCount(c:Int,pochasovka: Boolean): Int{
         var count = c
         if(pochasovka) {
-            if(count < 23) {
-                count = 23
-            }
+            count = 23
         }
         var intMoney: Int = 0
         when {

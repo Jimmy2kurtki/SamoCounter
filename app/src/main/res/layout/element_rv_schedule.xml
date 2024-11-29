@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="13dp"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
                 android:text="at 8:00"
@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
 
                 android:layout_gravity="center"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="13dp"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
                 android:text="25.09"
