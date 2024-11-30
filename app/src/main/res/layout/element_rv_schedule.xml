@@ -39,7 +39,7 @@
                 android:gravity="center"
                 android:text="at 8:00"
                 android:textAlignment="center"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="italic"
                 app:layout_constraintTop_toBottomOf="@+id/ivDay" />
 
@@ -59,7 +59,7 @@
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
                 android:text="25.09"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

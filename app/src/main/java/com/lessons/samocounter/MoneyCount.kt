@@ -4,7 +4,7 @@ class MoneyCount {
     fun moneyCount(c:Int,pochasovka: Boolean): Int{
         var count = c
         if(pochasovka) {
-            count = 23
+            count = 24
         }
         var intMoney: Int = 0
         when {

@@ -7,5 +7,6 @@ public class Data {
         this.nameSim = name;
         this.emh = surname;
         this.date = year;
+
     }
 }

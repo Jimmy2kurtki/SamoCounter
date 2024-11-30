@@ -3,17 +3,17 @@ package com.lessons.samocounter
 const val VITYA = "Янковский В"
 const val DEGTER = "Дегтерев Д"
 const val FARA = "Ибрагимов А"
-const val NURG = "Нургалеев К"
+const val LITVIN = "Литвиненко А"
 const val CHECK = "Чекмарев Д"
 const val YA = "Никитин М"
 const val ZAHAR = "Машуков З"
 const val SZHENYA = "Казанцев Е"
 const val KARCEV = "Карцев Д"
 const val LEHA = "Вокин А"
-const val OST = "Островский А"
 const val VOLODYA = "Сичькарь В"
+const val TUMASH = "Тумашевич И"
 
-const val MOUNTH = 11
+const val MOUNTH = 12
 const val YEAR = 2024
 
 const val KEY_SWITCH_REMEMBER_WORK = "switchStateRememberWorks"

@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
     private long backPressedTime;
     private final MoneyCount moneyCount = new MoneyCount();
 
+    boolean[] checkboxState;
+
     boolean settingsTireChecked, settingsBrakedrumChecked, settingsCableChecked,
             settingsRackChecked, settingsDashboardChecked, settingsTriggerChecked,
             settingsMkChecked, settingsFenderChecked, settingsControllerChecked,
@@ -134,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         buttonHard = findViewById(R.id.button_hard);
         listView = findViewById(R.id.listView);
 
+        checkboxState = new boolean[12];
 
         adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
     }
@@ -315,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getDataBD() {
         LinkedList<Data> list = dbHelper.getAll();
+
         String text = "";
         for (Data d : list)
             if (d.date.equals(variableData.getDateText()))
@@ -329,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
             Collections.reverse(arrayListSim);
             createListView();
         }
+
     }
 
     private void saveCountSimTXT() {
@@ -486,7 +491,7 @@ public class MainActivity extends AppCompatActivity {
                     checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            Log.d("Checkbox", "Option " + (index + 1) + ": " + b);
+                            checkboxState[index] = b;
                         }
                     });
                     GridLayout.LayoutParams params = new GridLayout.LayoutParams();
@@ -521,6 +526,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private String stringCheckBoxState(){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < checkboxState.length; i++) {
+            if(checkboxState[i]) {
+                stringBuilder.append("1");
+            } else {
+                stringBuilder.append("0");
+            }
+        }
+        return stringBuilder.toString();
     }
 
     private void clickScanner(TextView b) {
