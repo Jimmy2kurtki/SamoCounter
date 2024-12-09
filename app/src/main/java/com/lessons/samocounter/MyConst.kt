@@ -20,35 +20,74 @@ const val KEY_SWITCH_REMEMBER_WORK = "switchStateRememberWorks"
 const val KEY_SELECT = "selectedWorker"
 const val NAME_PREF_SELECT_SPINNER = "SelectedWorker"
 
-const val NAME_CHECKBOX_WORK_TIRE = "Шина"
-const val NAME_CHECKBOX_WORK_BRAKEDRUM = "Барабан"
-const val NAME_CHECKBOX_WORK_CABLE = "Трос"
-
-const val NAME_CHECKBOX_WORK_RACK = "Стойка"
-const val NAME_CHECKBOX_WORK_DASHBOARD = "Дэшборд"
-const val NAME_CHECKBOX_WORK_TRIGGER = "Курок"
-
-const val NAME_CHECKBOX_WORK_MK = "МК"
-const val NAME_CHECKBOX_WORK_FENDER = "Крыло"
-const val NAME_CHECKBOX_WORK_CONTROLLER = "Контроллер"
-
-const val NAME_CHECKBOX_WORK_BRAKEHANDLE = "Ручки"
-const val NAME_CHECKBOX_WORK_LOCK = "Замок"
-const val NAME_CHECKBOX_WORK_FRAME = "Рама"
 
 
-const val SHINA = "Tire";
-const val BARABAN = "Brakedrum";
-const val TROS = "Cable";
+const val NAME_CHECKBOX_WORK_RACK           = "\nСтойка\n"
+const val NAME_CHECKBOX_WORK_FORKSTEM       = "\nШток\nвилки"
+const val NAME_CHECKBOX_WORK_FRAME          = "\nРама\n"
 
-const val STOIKA = "RACK";
-const val DASHBOARD = "DASHBOARD";
-const val KUROK = "Trigger";
+const val NAME_CHECKBOX_WORK_TIRE           = "\nШина\n"
+const val NAME_CHECKBOX_WORK_MK             = "\nМК\n"
+const val NAME_CHECKBOX_WORK_REARLIGHTCABLE = "Шлейф\nзаднего\nфонаря"
 
-const val MK = "Mk";
-const val KRILO = "Fender";
-const val CONTROLLER = "Controller";
+const val NAME_CHECKBOX_WORK_BACKFENDER     = "Заднее\nкрыло\n(комплект)"
+const val NAME_CHECKBOX_WORK_BACKCABLE      = "\nЗадний\nтрос"
+const val NAME_CHECKBOX_WORK_BACKBRAKEDRUM  = "\nЗадний\nбарабан"
 
-const val RUCHKI = "Brakehandle";
-const val ZAMOK = "Lock";
-const val RAMA = "Frame";
+const val NAME_CHECKBOX_WORK_FRONTFENDER    = "\nПереднее\nкрыло"
+const val NAME_CHECKBOX_WORK_FRONTCABLE     = "\nПередний\nтрос"
+const val NAME_CHECKBOX_WORK_FRONTBRAKEDRUM = "\nПередний\nбарабан"
+
+const val NAME_CHECKBOX_WORK_DASHBOARD      = "\nДэшборд\n"
+const val NAME_CHECKBOX_WORK_CONTROLLER     = "\nКонтроллер\n"
+const val NAME_CHECKBOX_WORK_IOT            = "\nIot\n"
+
+const val NAME_CHECKBOX_WORK_DASHBOARDCOVER = "\nКрышка\nдашборда"
+const val NAME_CHECKBOX_WORK_CONTROLLOOP    = "\nШлейф\nуправления"
+const val NAME_CHECKBOX_WORK_LOCK           = "\nЗамок\n"
+
+const val NAME_CHECKBOX_WORK_TRIGGER        = "\nКурок\n"
+const val NAME_CHECKBOX_WORK_FRONTMAT       = "\nПередний\nковрик"
+const val NAME_CHECKBOX_WORK_BACKMAT        = "\nЗадний\nковрик"
+
+const val NAME_CHECKBOX_WORK_CASSETTE       = "\nКассета\n"
+const val NAME_CHECKBOX_WORK_TOPPAD         = "Верхняя\nнакладка\nруля"
+const val NAME_CHECKBOX_WORK_BOTTOMPANEL    = "Нижняя\nнакладка\nруля"
+
+const val NAME_CHECKBOX_WORK_OILSEAL        = "\nСальник\n"
+const val NAME_CHECKBOX_WORK_WHEELBEARING   = "\nПодшипники\nколеса"
+const val NAME_CHECKBOX_WORK_FORKBEARING    = "\nПодшипники\nвилки"
+
+
+
+const val STOIKA           = "Rack";
+const val SHTOK            = "Fork";
+const val RAMA             = "Frame";
+
+const val SHINA            = "Tire";
+const val MK               = "Mk";
+const val SHLEIFFONARYA    = "Rear"
+
+const val ZADNEKRILO       = "BackFender"
+const val ZADNITROS        = "BackCable";
+const val ZADNIBARABAN     = "BackBrakedrum";
+
+const val PEREDNEKRILO     = "FrontFender"
+const val PEREDNETROS      = "FrontCable"
+const val PEREDNEBARABAN   = "FrontBaraban"
+
+const val DASHBOARD        = "Dashboard";
+const val CONTROLLER       = "Controller";
+const val IOT              = "Iot"
+
+const val KRISHKADASH      = "DashCover"
+const val SHLEIF           = "Loop"
+const val ZAMOK            = "Lock";
+
+const val KUROK            = "Trigger";
+const val PEREDNICOVRIK    = "FrontMat"
+const val ZADNICOVRIK      = "BackMat"
+
+const val KASSETA          = "Cassette"
+const val VERHNYANAKLADKA  = "TopPad"
+const val NIZSHNYANAKLADKA = "BottomPad"

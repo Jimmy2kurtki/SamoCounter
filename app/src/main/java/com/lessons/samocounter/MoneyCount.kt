@@ -26,4 +26,5 @@ class MoneyCount {
         }
         return intMoney
     }
+
 }

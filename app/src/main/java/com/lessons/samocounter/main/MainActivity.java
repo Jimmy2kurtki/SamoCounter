@@ -1,35 +1,9 @@
 package com.lessons.samocounter.main;
 
-import static com.lessons.samocounter.MyConstKt.BARABAN;
-import static com.lessons.samocounter.MyConstKt.CONTROLLER;
-import static com.lessons.samocounter.MyConstKt.DASHBOARD;
-import static com.lessons.samocounter.MyConstKt.KRILO;
-import static com.lessons.samocounter.MyConstKt.KUROK;
-import static com.lessons.samocounter.MyConstKt.MK;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_BRAKEDRUM;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_BRAKEHANDLE;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_CABLE;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_CONTROLLER;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_DASHBOARD;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_FENDER;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_FRAME;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_LOCK;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_MK;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_RACK;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_TIRE;
-import static com.lessons.samocounter.MyConstKt.NAME_CHECKBOX_WORK_TRIGGER;
-import static com.lessons.samocounter.MyConstKt.RAMA;
-import static com.lessons.samocounter.MyConstKt.RUCHKI;
-import static com.lessons.samocounter.MyConstKt.SHINA;
-import static com.lessons.samocounter.MyConstKt.STOIKA;
-import static com.lessons.samocounter.MyConstKt.TROS;
-import static com.lessons.samocounter.MyConstKt.ZAMOK;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,15 +27,17 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.lessons.samocounter.DBHelper;
 import com.lessons.samocounter.Data;
-import com.lessons.samocounter.GlobalDataHolder;
 import com.lessons.samocounter.MoneyCount;
 import com.lessons.samocounter.R;
 import com.lessons.samocounter.VariableData;
+import com.lessons.samocounter.main.classhelpers.CheckboxArray;
+import com.lessons.samocounter.main.classhelpers.ClearNumberSim;
+import com.lessons.samocounter.main.classhelpers.FilterRemove;
+import com.lessons.samocounter.main.classhelpers.SendSimCalc;
 import com.lessons.samocounter.money.MoneyActivity;
 import com.lessons.samocounter.otherDays.OtherDaysActivity;
 import com.lessons.samocounter.qrsim.VremennoeReshenieActivity;
 import com.lessons.samocounter.schedule.WorkScheduleActivity;
-import com.lessons.samocounter.settings.SettingsActivity;
 import com.lessons.samocounter.snake.MainActivitySnake;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -86,21 +62,18 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private DBHelper dbHelper;
 
-    private TextView textViewEasy, textViewNorm, textViewHard, textViewSumSim, money, buttonEasy, 
-            buttonNorm, buttonHard, allButtonsForMethod;
+    private TextView textViewSumSim, money, buttonNorm, allButtonsForMethod;
     private ListView listView;
 
     private int intTextViewEasy, intTextViewNorm, intTextViewHard, intTextViewSumSim;
+    private final ArrayList<String> arrayListSimFull = new ArrayList<>();
     private final ArrayList<String> arrayListSim = new ArrayList<>();
     private long backPressedTime;
     private final MoneyCount moneyCount = new MoneyCount();
 
     boolean[] checkboxState;
 
-    boolean settingsTireChecked, settingsBrakedrumChecked, settingsCableChecked,
-            settingsRackChecked, settingsDashboardChecked, settingsTriggerChecked,
-            settingsMkChecked, settingsFenderChecked, settingsControllerChecked,
-            settingsBrakehendleChecked, settingsLockChecked, settingsFrameChecked;
+    String[] checkboxArray = CheckboxArray.getCheckboxArray();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -115,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         initAll();
 
-        prefireTouchListener(buttonEasy, buttonNorm, buttonHard);
+        prefireTouchListener(buttonNorm);
 
         getDataBD();
 
@@ -127,18 +100,15 @@ public class MainActivity extends AppCompatActivity {
     private void initAll(){
         dbHelper = new DBHelper(this);
         money = findViewById(R.id.money);
-        textViewEasy = findViewById(R.id.textView_easy);
-        textViewNorm = findViewById(R.id.textView_norm);
-        textViewHard = findViewById(R.id.textView_hard);
         textViewSumSim = findViewById(R.id.textView_sumSim);
-        buttonEasy = findViewById(R.id.button_easy);
         buttonNorm = findViewById(R.id.button_norm);
-        buttonHard = findViewById(R.id.button_hard);
         listView = findViewById(R.id.listView);
 
-        checkboxState = new boolean[12];
+        checkboxState = new boolean[27];
 
         adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
+
+
     }
 
     private void createListView() {
@@ -147,37 +117,99 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_delete_main, null);
-                String removeString = arrayListSim.get(position);
-                String removeString1 = removeString.replaceAll("EASY", "");
-                removeString1 = removeString1.replaceAll("NORM", "");
-                removeString1 = removeString1.replaceAll("HARD", "");
-                removeString1 = removeString1.replaceAll(variableData.getDateText(), "");
-                builder.setView(cl)
-                        .setCancelable(true);
 
+                FilterRemove.getFiltret(arrayListSimFull, arrayListSim, position);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_info_main, null);
+
+                builder.setView(cl)
+                                .setCancelable(true);
                 final AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-                final TextView textViewAlert = cl.findViewById(R.id.textView_sim);
-                textViewAlert.setText(removeString1);
-                TextView positiveButton = cl.findViewById(R.id.button_positive);
-                TextView negativeButton = cl.findViewById(R.id.button_negative);
+
+                GridLayout checkBoxesContainer = cl.findViewById(R.id.gridLayout_checkboxes_info);
+                checkBoxesContainer.setColumnCount(3);
+
+                int coord = 0;
+                for (int i = 0; i < checkboxArray.length; i++) {
+                    if (FilterRemove.checkboxStateInfo[i].equals("1")) {
+                        TextView textView = (TextView) getLayoutInflater().inflate(R.layout.textview_alertdialog_main_info, null);
+                        textView.setText(checkboxArray[i]);
+
+                        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                        params.rowSpec = GridLayout.spec(coord / 3);
+                        params.columnSpec = GridLayout.spec(coord % 3);
+                        textView.setLayoutParams(params);
+                        coord++;
+                        checkBoxesContainer.addView(textView);
+                    }
+                }
+
+                final TextView textViewAlert = cl.findViewById(R.id.textView_sim_info);
+                textViewAlert.setText(FilterRemove.removeString1);
+
+
+                TextView positiveButton = cl.findViewById(R.id.button_positive_info);
+                TextView sendButton  = cl.findViewById(R.id.button_send_info);
+                TextView negativeButton = cl.findViewById(R.id.button_delete_info);
 
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
-                        removeSim(removeString, position);
-                        adapter.notifyDataSetChanged();
+
                         alertDialog.dismiss();
                     }
                 });
 
+                sendButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SendSimCalc.calc(checkboxArray);
+                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, SendSimCalc.sendSim);
+                        sendIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(sendIntent, null));
+                    }
+                });
+
+                String finalRemoveString = FilterRemove.removeString1;
                 negativeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        AlertDialogDelete(position, FilterRemove.removeString, finalRemoveString);
                         alertDialog.dismiss();
                     }
                 });
+            }
+        });
+    }
+
+    private void AlertDialogDelete(int position, String removeString, String removeString1){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_delete_main, null);
+
+        builder.setView(cl)
+                .setCancelable(true);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        final TextView textViewAlert = cl.findViewById(R.id.textView_sim);
+        textViewAlert.setText(removeString1);
+        TextView positiveButton = cl.findViewById(R.id.button_positive);
+        TextView negativeButton = cl.findViewById(R.id.button_negative);
+
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                removeSim(removeString, position);
+                adapter.notifyDataSetChanged();
+                alertDialog.dismiss();
+            }
+        });
+
+        negativeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
             }
         });
     }
@@ -194,10 +226,8 @@ public class MainActivity extends AppCompatActivity {
                 .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
         PrimaryDrawerItem snake = new PrimaryDrawerItem().withIdentifier(4).withName("Snake")
                 .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
-        PrimaryDrawerItem settings = new PrimaryDrawerItem().withIdentifier(6).withName("Settings")
-                .withSelectable(false).withTextColor(Color.rgb(80, 90, 100));
 
-        Drawer result = newDrawerBuilder(workSchedule, otherDays, money, generateQr, snake, settings);
+        Drawer result = newDrawerBuilder(workSchedule, otherDays, money, generateQr, snake);
 
         int color = Color.parseColor("#505963");
 
@@ -207,12 +237,11 @@ public class MainActivity extends AppCompatActivity {
         clickOnLeftMaterialDrawer(money, MoneyActivity.class);
         clickOnLeftMaterialDrawer(snake,MainActivitySnake.class);
         clickOnLeftMaterialDrawer(generateQr, VremennoeReshenieActivity.class);
-        clickOnLeftMaterialDrawer(settings, SettingsActivity.class);
     }
 
     private Drawer newDrawerBuilder(PrimaryDrawerItem workSchedule, PrimaryDrawerItem otherDays,
                                     PrimaryDrawerItem money, PrimaryDrawerItem generateQr,
-                                    PrimaryDrawerItem snake, PrimaryDrawerItem settings) {
+                                    PrimaryDrawerItem snake) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextAppearance(this, R.style.AppToolbarTitleStyle);
@@ -233,8 +262,6 @@ public class MainActivity extends AppCompatActivity {
                         new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
                         snake,
                         new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
-                        new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem(),
-                        settings,
                         new DividerDrawerItem(), new DividerDrawerItem(), new DividerDrawerItem()
                 );
 
@@ -267,43 +294,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void removeSim(String removeString, int i) {
 
-        boolean indexEasy = removeString.contains("EASY");
-        boolean indexNorm = removeString.contains("NORM");
         boolean indexData = removeString.contains(variableData.getDateText());
         if (indexData) {
-            if (indexEasy) {
-                intTextViewEasy--;
-                textViewEasy.setText(String.valueOf(intTextViewEasy));
-            } else if (indexNorm) {
-                intTextViewNorm--;
-                textViewNorm.setText(String.valueOf(intTextViewNorm));
-            } else {
-                intTextViewHard--;
-                textViewHard.setText(String.valueOf(intTextViewHard));
-            }
-            intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
+            intTextViewNorm--;
+            intTextViewSumSim = intTextViewNorm;
             moneyCount.moneyCount(intTextViewSumSim,true);
             money.setText(String.valueOf(moneyCount.moneyCount(intTextViewSumSim,true)));
             textViewSumSim.setText(String.valueOf(intTextViewSumSim));
             dbHelper.deleteOne(removeString);
             arrayListSim.remove(i);
+            arrayListSimFull.remove(i);
 
             saveCountSimTXT();
         }
     }
 
     private void setAllCountSim(@NonNull TextView btn) {
-        if (btn.equals(buttonEasy)) {
-            intTextViewEasy++;
-            textViewEasy.setText(String.valueOf(intTextViewEasy));
-        } else if (btn.equals(buttonNorm)) {
-            intTextViewNorm++;
-            textViewNorm.setText(String.valueOf(intTextViewNorm));
-        } else {
-            intTextViewHard++;
-            textViewHard.setText(String.valueOf(intTextViewHard));
-        }
-        intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
+
+        intTextViewNorm++;
+        intTextViewSumSim = intTextViewNorm;
         moneyCount.moneyCount(intTextViewSumSim,true);
         money.setText(String.valueOf(moneyCount.moneyCount(intTextViewSumSim,true)));
         textViewSumSim.setText(String.valueOf(intTextViewSumSim));
@@ -319,21 +328,29 @@ public class MainActivity extends AppCompatActivity {
     private void getDataBD() {
         LinkedList<Data> list = dbHelper.getAll();
 
+
         String text = "";
+        String textFull = "";
         for (Data d : list)
             if (d.date.equals(variableData.getDateText()))
-                text = text + d.nameSim + " " + d.emh + " " + d.date + "\n";
+                text = text + d.nameSim + " " + d.date + "\n";
+        for(Data d : list)
+            if (d.date.equals(variableData.getDateText()))
+                textFull = textFull + d.nameSim + " " + d.emh + " "  + d.date + "\n";
 
         if (text.isEmpty()) {
 
         } else {
             String[] arr = text.split("\n");
+            String[] arrFull = textFull.split("\n");
 
             Collections.addAll(arrayListSim, arr);
             Collections.reverse(arrayListSim);
+            Collections.addAll(arrayListSimFull, arrFull);
+            Collections.reverse(arrayListSimFull);
+
             createListView();
         }
-
     }
 
     private void saveCountSimTXT() {
@@ -374,9 +391,6 @@ public class MainActivity extends AppCompatActivity {
                     moneyCount.moneyCount(intTextViewSumSim,true);
                     textViewSumSim.setText(String.valueOf(intTextViewSumSim));
 
-                    textViewEasy.setText(String.valueOf(intTextViewEasy));
-                    textViewNorm.setText(String.valueOf(intTextViewNorm));
-                    textViewHard.setText(String.valueOf(intTextViewHard));
                 }
             }
         } catch (IOException e) {
@@ -387,35 +401,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setNumberSimInArrayListSim(String numberSim, TextView btn) {
-        numberSim = numberSim.toUpperCase();
-        numberSim = numberSim.replaceAll("\\s+", "");
-        numberSim = numberSim.replaceAll("EASY", "");
-        numberSim = numberSim.replaceAll("NORM", "");
-        numberSim = numberSim.replaceAll("HARD", "");
-        numberSim = numberSim.replaceAll(variableData.getDateText(), "");
-        if (numberSim.isEmpty()) {
-            numberSim = "-----";
-        }
-        String strBtn = "";
-        if (btn.equals(buttonEasy)) {
-            strBtn = "EASY";
-        } else if (btn.equals(buttonNorm)) {
-            strBtn = "NORM";
-        } else {
-            strBtn = "HARD";
-        }
+        numberSim = ClearNumberSim.clear(numberSim);
+        String strBtn = stringCheckBoxState();
 
         setAllCountSim(btn);
-        arrayListSim.add(0, numberSim + " " + strBtn + " " + variableData.getDateText());
+        arrayListSimFull.add(0, numberSim + " " + strBtn + " " + variableData.getDateText());
+        arrayListSim.add(0, numberSim + " " + variableData.getDateText());
         createListView();
 
         saveDataBD(numberSim, strBtn);
     }
 
-    private void prefireTouchListener(TextView z, TextView x, TextView c) {
+    private void prefireTouchListener(TextView z) {
         touchListener((View) z);
-        touchListener((View) x);
-        touchListener((View) c);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -436,72 +434,33 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initAllChecked(){
-
-        GlobalDataHolder globalDataHolder = new GlobalDataHolder(this);
-
-        settingsTireChecked = globalDataHolder.getSavedData(SHINA);
-        settingsBrakedrumChecked = globalDataHolder.getSavedData(BARABAN);
-        settingsCableChecked = globalDataHolder.getSavedData(TROS);
-
-        settingsRackChecked = globalDataHolder.getSavedData(STOIKA);
-        settingsDashboardChecked = globalDataHolder.getSavedData(DASHBOARD);
-        settingsTriggerChecked = globalDataHolder.getSavedData(KUROK);
-
-        settingsMkChecked = globalDataHolder.getSavedData(MK);
-        settingsFenderChecked = globalDataHolder.getSavedData(KRILO);
-        settingsControllerChecked = globalDataHolder.getSavedData(CONTROLLER);
-
-        settingsBrakehendleChecked = globalDataHolder.getSavedData(RUCHKI);
-        settingsLockChecked = globalDataHolder.getSavedData(ZAMOK);
-        settingsFrameChecked = globalDataHolder.getSavedData(RAMA);
-    }
 
     private void customDialog(TextView btn) {
-        initAllChecked();
-        boolean isChecked = settingsTireChecked || settingsBrakedrumChecked || settingsCableChecked ||
-                settingsRackChecked || settingsDashboardChecked || settingsTriggerChecked ||
-                settingsMkChecked || settingsFenderChecked || settingsControllerChecked ||
-                settingsBrakehendleChecked || settingsLockChecked || settingsFrameChecked;
-
-        boolean[] arrayIsChecked = {settingsTireChecked, settingsBrakedrumChecked, settingsCableChecked,
-                settingsRackChecked, settingsDashboardChecked, settingsTriggerChecked,
-                settingsMkChecked, settingsFenderChecked, settingsControllerChecked,
-                settingsBrakehendleChecked, settingsLockChecked, settingsFrameChecked};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_scooter_number_main, null);
         builder.setCancelable(false)
                 .setView(cl);
 
-        if (isChecked) {
-            GridLayout checkBoxesContainer = cl.findViewById(R.id.gridLayout_checkboxes);
-            checkBoxesContainer.setColumnCount(3);
-            String[] options = {NAME_CHECKBOX_WORK_TIRE, NAME_CHECKBOX_WORK_BRAKEDRUM,
-                    NAME_CHECKBOX_WORK_CABLE, NAME_CHECKBOX_WORK_RACK, NAME_CHECKBOX_WORK_DASHBOARD,
-                    NAME_CHECKBOX_WORK_TRIGGER, NAME_CHECKBOX_WORK_MK, NAME_CHECKBOX_WORK_FENDER,
-                    NAME_CHECKBOX_WORK_CONTROLLER, NAME_CHECKBOX_WORK_BRAKEHANDLE,
-                    NAME_CHECKBOX_WORK_LOCK, NAME_CHECKBOX_WORK_FRAME};
-            int coord = 0;
-            for (int i = 0; i < options.length; i++) {
-                if (arrayIsChecked[i]) {
-                    CheckBox checkBox = (CheckBox) getLayoutInflater().inflate(R.layout.checkbox_alertdialog_main, null);
-                    checkBox.setText(options[i]);
-                    final int index = i;
-                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            checkboxState[index] = b;
-                        }
-                    });
-                    GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-                    params.rowSpec = GridLayout.spec(coord / 3); // Определяем строку
-                    params.columnSpec = GridLayout.spec(coord % 3); // Определяем столбец
-                    checkBox.setLayoutParams(params);
-                    coord++;
-                    checkBoxesContainer.addView(checkBox);
+        GridLayout checkBoxesContainer = cl.findViewById(R.id.gridLayout_checkboxes);
+        checkBoxesContainer.setColumnCount(3);
+        int coord = 0;
+        for (int i = 0; i < checkboxArray.length; i++) {
+            CheckBox checkBox = (CheckBox) getLayoutInflater().inflate(R.layout.checkbox_alertdialog_main, null);
+            checkBox.setText(checkboxArray[i]);
+            final int index = i;
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    checkboxState[index] = b;
                 }
-            }
+            });
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.rowSpec = GridLayout.spec(coord / 3); // Определяем строку
+            params.columnSpec = GridLayout.spec(coord % 3); // Определяем столбец
+            checkBox.setLayoutParams(params);
+            coord++;
+            checkBoxesContainer.addView(checkBox);
         }
 
         final AlertDialog alertDialog = builder.create();
@@ -537,6 +496,7 @@ public class MainActivity extends AppCompatActivity {
                 stringBuilder.append("0");
             }
         }
+        checkboxState = new boolean[12];
         return stringBuilder.toString();
     }
 

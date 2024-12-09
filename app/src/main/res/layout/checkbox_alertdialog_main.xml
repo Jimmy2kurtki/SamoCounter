@@ -3,4 +3,6 @@
     android:id="@+id/dynamic_checkbox"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:buttonTint="@color/color_state_list"/>
+    android:buttonTint="@color/color_state_list"
+    android:fontFamily="@font/tektur"
+    android:textSize="12sp" />

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SamoCounter</string>
     <string name="easy">EASY</string>
-    <string name="middle">NORM</string>
+    <string name="middle">+1 SIM</string>
     <string name="hard">HARD</string>
     <string name="scooter_number">SCOOTER NUMBER</string>
     <string name="delete">DELETE?</string>

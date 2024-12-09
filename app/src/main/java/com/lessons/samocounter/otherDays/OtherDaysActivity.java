@@ -159,7 +159,7 @@ public class OtherDaysActivity extends AppCompatActivity {
         LinkedList<Data> list = dbHelper.getAll();
         String text = "";
         String dateText = "";
-        for(Data d:list) text = text + d.nameSim.replaceAll(".BIKE/\\?", "") + " " + d.emh + " " + d.date + "\n";
+        for(Data d:list) text = text + d.nameSim.replaceAll(".BIKE/\\?", "") + " " + d.date + "\n";
         for(Data d:list) dateText = dateText + d.date + "\n";
 
         String[] arr = text.split("\n");

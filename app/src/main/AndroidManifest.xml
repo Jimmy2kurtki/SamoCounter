@@ -21,24 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SamoCounter"
         tools:targetApi="31">
-        <activity
-            android:name=".settings.SettingsActivity"
-            android:exported="false" />
+
         <activity
             android:name=".schedule.calendar.CalendarActivity"
             android:exported="false" />
-        <activity
-            android:name=".schedule.ChangeActivity"
-            android:exported="false" />
+
         <activity
             android:name=".schedule.WorkScheduleActivity"
             android:exported="false" />
-        <activity
-            android:name=".DataTransfer"
-            android:exported="false" />
-        <activity
-            android:name=".Calculator"
-            android:exported="false" />
+
         <activity
             android:name=".snake.MainActivitySnake"
             android:exported="false" />

@@ -22,10 +22,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="407dp"
-        android:layout_height="135dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +34,7 @@
 
 
         <TextView
-            android:id="@+id/button_easy"
+            android:id="@+id/button_norm"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -46,88 +46,12 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:onClick="touchListener"
-            android:text="@string/easy"
-            android:textAlignment="center"
-            android:textColor="@color/whooshColor4_grey"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/button_norm"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/whooshColor3_red"
-            android:fontFamily="@font/audiowide"
-            android:gravity="center"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:onClick="touchListener"
             android:text="@string/middle"
             android:textAlignment="center"
             android:textColor="@color/whooshColor4_grey"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/button_hard"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@drawable/circle"
-            android:backgroundTint="@color/whooshColor4_grey"
-            android:fontFamily="@font/audiowide"
-            android:gravity="center"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:onClick="touchListener"
-            android:text="@string/hard"
-            android:textAlignment="center"
-            android:textColor="@color/whooshColor2_white"
-            android:textSize="24sp" />
+            android:textSize="60sp" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView_easy"
-        android:layout_width="135dp"
-        android:layout_height="50dp"
-        android:fontFamily="@font/audiowide"
-        android:textAlignment="center"
-        android:textColor="@color/whooshColor1_orange"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="34" />
-
-    <TextView
-        android:id="@+id/textView_norm"
-        android:layout_width="135dp"
-        android:layout_height="50dp"
-        android:fontFamily="@font/audiowide"
-        android:textAlignment="center"
-        android:textColor="@color/whooshColor3_red"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/textView_hard"
-        app:layout_constraintStart_toEndOf="@+id/textView_easy"
-        tools:text="12" />
-
-    <TextView
-        android:id="@+id/textView_hard"
-        android:layout_width="135dp"
-        android:layout_height="50dp"
-        android:fontFamily="@font/audiowide"
-        android:textAlignment="center"
-        android:textColor="@color/whooshColor4_grey"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="5" />
 
     <TextView
         android:id="@+id/textView_sumSim"
@@ -150,14 +74,13 @@
         android:layout_height="0dp"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_norm"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintDimensionRatio="w,"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_sumSim"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_sumSim" />
 
     <TextView
         android:id="@+id/money"
