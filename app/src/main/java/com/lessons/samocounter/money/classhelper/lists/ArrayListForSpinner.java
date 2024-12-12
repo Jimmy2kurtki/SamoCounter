@@ -15,7 +15,6 @@ public class ArrayListForSpinner {
             String[] ari = addString.split("-");
             arrayListForSpinnerStart.add(ari[1]);
         }
-
     }
 
     public static class Finish {

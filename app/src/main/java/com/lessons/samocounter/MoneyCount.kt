@@ -35,7 +35,7 @@ class MoneyCount {
             val parts: Array<String> = time.split(":".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()
             val hours = parts[0]
-            val minutes = parts[1]
+            val minutes: Int = parts[1].toInt()
             return ((hours.toDouble() * 430.65) + (minutes.toDouble() * 7.18)).toInt().toString()
         }
     }

@@ -35,6 +35,8 @@ public class MoneyActivity extends AppCompatActivity {
         initAll();
 
         StringForTv.TotalMoney.init(spinnerStartDate.getSelectedItemPosition(),spinnerFinishDate.getSelectedItemPosition());
+
+        setTextAll();
     }
 
     private void initAll() {
@@ -69,11 +71,11 @@ public class MoneyActivity extends AppCompatActivity {
         adapterSpinnerSimFinish.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFinishDate = findViewById(R.id.spinner_finish_date);
         spinnerFinishDate.setAdapter(adapterSpinnerSimFinish);
-        spinnerFinishDate.setSelection(ArrayListForSpinner.Start.getArray().size());
+        spinnerFinishDate.setSelection(ArrayListForSpinner.Start.getArray().size()-1);
     }
 
     private void setTextAll(){
-        tvMoneyAtDates.setText("63");
+        tvMoneyAtDates.setText(StringForTv.TotalMoney.getTotalMoney());
     }
 
     public void onBackPressed() {
