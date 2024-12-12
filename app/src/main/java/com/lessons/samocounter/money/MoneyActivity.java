@@ -34,8 +34,6 @@ public class MoneyActivity extends AppCompatActivity {
 
         initAll();
 
-        StringForTv.TotalMoney.init(spinnerStartDate.getSelectedItemPosition(),spinnerFinishDate.getSelectedItemPosition());
-
         setTextAll();
     }
 
@@ -46,6 +44,7 @@ public class MoneyActivity extends AppCompatActivity {
         initSp();
         initTv();
 
+        StringForTv.initAll(spinnerStartDate.getSelectedItemPosition(),spinnerFinishDate.getSelectedItemPosition());
 
     }
 
@@ -77,6 +76,9 @@ public class MoneyActivity extends AppCompatActivity {
 
     private void setTextAll(){
         tvMoneyAtDates.setText(StringForTv.TotalMoney.getTotalMoney());
+        tvMoneyPerDay.setText(StringForTv.AvarageMoney.getAvarageMoney());
+        tvHoursAtDates.setText(StringForTv.TotalHours.getTotalHours());
+
     }
 
     public void onBackPressed() {

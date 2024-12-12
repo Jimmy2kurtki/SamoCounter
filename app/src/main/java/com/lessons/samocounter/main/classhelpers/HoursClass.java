@@ -9,11 +9,15 @@ public class HoursClass {
     }
 
     public static int convertFromHourToInt(String time) {
-        String[] parts = time.split(":");
-        int hours = Integer.parseInt(parts[0]);
-        int minutes = Integer.parseInt(parts[1]);
+        if (time.equals("")){
+            return 0;
+        } else {
+            String[] parts = time.split(":");
+            int hours = Integer.parseInt(parts[0]);
+            int minutes = Integer.parseInt(parts[1]);
 
-        return hours * 60 + minutes;
+            return hours * 60 + minutes;
+        }
     }
 
     public static String addHours(String startTime) {
