@@ -13,7 +13,7 @@ import kotlin.jvm.java
 import kotlin.text.isEmpty
 import kotlin.text.toInt
 
-class CalculatorActivity : AppCompatActivity() {
+class   CalculatorActivity : AppCompatActivity() {
 
     private lateinit var resultSimMoney: TextView
     private lateinit var resultMoneySim: TextView

@@ -21,15 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SamoCounter"
         tools:targetApi="31">
-
+        <activity
+            android:name=".money.old.MoneyActivityOld"
+            android:exported="false" />
         <activity
             android:name=".schedule.calendar.CalendarActivity"
             android:exported="false" />
-
         <activity
             android:name=".schedule.WorkScheduleActivity"
             android:exported="false" />
-
         <activity
             android:name=".snake.MainActivitySnake"
             android:exported="false" />

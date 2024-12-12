@@ -16,11 +16,11 @@
         android:fontFamily="@font/audiowide"
 
         android:textColor="@color/whooshColor4_grey"
-        android:text="average sim"
+        android:text="average hours"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_sim_per_day" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_hours_per_day" />
 
     <TextView
         android:id="@+id/textView5"
@@ -34,7 +34,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_money_per_day" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_money_per_day" />
 
     <Spinner
         android:id="@+id/spinner_start_date"
@@ -58,7 +58,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_money_at_dates"
+        android:id="@+id/tv_money_at_dates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="101dp"
@@ -73,7 +73,7 @@
         tools:text="45789" />
 
     <TextView
-        android:id="@+id/textView_total"
+        android:id="@+id/tv_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -84,10 +84,10 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_money_at_dates" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_money_at_dates" />
 
     <TextView
-        android:id="@+id/textView_money_per_day"
+        android:id="@+id/tv_money_per_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -99,7 +99,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_total"
+        app:layout_constraintTop_toBottomOf="@+id/tv_total"
         tools:text="5789" />
 
     <TextView
@@ -110,15 +110,15 @@
         android:fontFamily="@font/audiowide"
 
         android:textColor="@color/whooshColor4_grey"
-        android:text="total sim"
+        android:text="total hours"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_sim_at_date" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_hours_at_date" />
 
     <TextView
-        android:id="@+id/textView_sim_per_day"
+        android:id="@+id/tv_hours_per_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -135,7 +135,7 @@
         tools:text="32" />
 
     <TextView
-        android:id="@+id/textView_sim_at_date"
+        android:id="@+id/tv_hours_at_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"

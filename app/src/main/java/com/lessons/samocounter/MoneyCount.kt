@@ -1,5 +1,8 @@
 package com.lessons.samocounter
 
+import com.google.common.primitives.UnsignedBytes.toInt
+import kotlin.time.times
+
 class MoneyCount {
     fun moneyCount(c:Int,pochasovka: Boolean): Int{
         var count = c
@@ -25,6 +28,16 @@ class MoneyCount {
             else -> intMoney = ((count - 23 * 146) - (7 * 190) - (3 * 210)) / 230 + 23 + 7 + 3
         }
         return intMoney
+    }
+
+    companion object{
+        fun moneyCountHours(time: String): String{
+            val parts: Array<String> = time.split(":".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
+            val hours = parts[0]
+            val minutes = parts[1]
+            return ((hours.toDouble() * 430.65) + (minutes.toDouble() * 7.18)).toInt().toString()
+        }
     }
 
 }

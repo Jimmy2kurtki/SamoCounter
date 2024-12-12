@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/textView_sim_at_dates"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fon"
+    tools:context=".money.old.MoneyActivityOld">
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView71"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:fontFamily="@font/audiowide"-->
+
+<!--        android:textColor="@color/whooshColor4_grey"-->
+<!--        android:text="average sim"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView_sim_per_day" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView5"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:fontFamily="@font/audiowide"-->
+
+<!--        android:textColor="@color/whooshColor4_grey"-->
+<!--        android:text="average money"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView_money_per_day" />-->
+
+<!--    <Spinner-->
+<!--        android:id="@+id/spinner_start_date"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="@android:drawable/btn_dropdown"-->
+<!--        android:spinnerMode="dropdown"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <Spinner-->
+<!--        android:id="@+id/spinner_finish_date"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:background="@android:drawable/btn_dropdown"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView_money_at_dates"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="101dp"-->
+<!--        android:background="?android:attr/galleryItemBackground"-->
+<!--        android:fontFamily="@font/audiowide"-->
+<!--        android:textColor="@color/whooshColor2_white"-->
+<!--        android:textSize="48sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        tools:text="45789" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView_total"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:fontFamily="@font/audiowide"-->
+
+<!--        android:textColor="@color/whooshColor4_grey"-->
+<!--        android:text="total money"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView_money_at_dates" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView_money_per_day"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+
+<!--        android:background="?android:attr/galleryItemBackground"-->
+<!--        android:fontFamily="@font/audiowide"-->
+<!--        android:textColor="@color/whooshColor2_white"-->
+<!--        android:textSize="48sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView_total"-->
+<!--        tools:text="5789" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView7"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:fontFamily="@font/audiowide"-->
+
+<!--        android:textColor="@color/whooshColor4_grey"-->
+<!--        android:text="total sim"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.501"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView_sim_at_date" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView_sim_per_day"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:background="?android:attr/galleryItemBackground"-->
+
+<!--        android:fontFamily="@font/audiowide"-->
+<!--        android:textColor="@color/whooshColor2_white"-->
+<!--        android:textSize="48sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.503"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView7"-->
+<!--        tools:text="32" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView_sim_at_date"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:background="?android:attr/galleryItemBackground"-->
+<!--        android:fontFamily="@font/audiowide"-->
+<!--        android:textColor="@color/whooshColor2_white"-->
+<!--        android:textSize="48sp"-->
+
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.501"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView5"-->
+<!--        tools:text="302" />-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

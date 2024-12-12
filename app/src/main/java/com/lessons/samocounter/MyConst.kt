@@ -16,7 +16,7 @@ const val TUMASH = "Тумашевич И"
 const val MOUNTH = 12
 const val YEAR = 2024
 
-const val KEY_SWITCH_REMEMBER_WORK = "switchStateRememberWorks"
+const val KEY_HOURS = "key_hours"
 const val KEY_SELECT = "selectedWorker"
 const val NAME_PREF_SELECT_SPINNER = "SelectedWorker"
 

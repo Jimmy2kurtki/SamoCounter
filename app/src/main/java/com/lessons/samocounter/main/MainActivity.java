@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -33,6 +32,8 @@ import com.lessons.samocounter.VariableData;
 import com.lessons.samocounter.main.classhelpers.CheckboxArray;
 import com.lessons.samocounter.main.classhelpers.ClearNumberSim;
 import com.lessons.samocounter.main.classhelpers.FilterRemove;
+import com.lessons.samocounter.main.classhelpers.HoursArray;
+import com.lessons.samocounter.main.classhelpers.HoursClass;
 import com.lessons.samocounter.main.classhelpers.SendSimCalc;
 import com.lessons.samocounter.money.MoneyActivity;
 import com.lessons.samocounter.otherDays.OtherDaysActivity;
@@ -45,11 +46,6 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -62,14 +58,14 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private DBHelper dbHelper;
 
-    private TextView textViewSumSim, money, buttonNorm, allButtonsForMethod;
     private ListView listView;
+    private TextView buttonAddSim, buttonStayed, buttonLate;
+    private TextView tvHours, tvSumSim, tvMoney;
 
-    private int intTextViewEasy, intTextViewNorm, intTextViewHard, intTextViewSumSim;
+
     private final ArrayList<String> arrayListSimFull = new ArrayList<>();
     private final ArrayList<String> arrayListSim = new ArrayList<>();
     private long backPressedTime;
-    private final MoneyCount moneyCount = new MoneyCount();
 
     boolean[] checkboxState;
 
@@ -88,31 +84,66 @@ public class MainActivity extends AppCompatActivity {
 
         initAll();
 
-        prefireTouchListener(buttonNorm);
+        listnerAddSim(buttonAddSim);
+        listnerStayed();
+        listnerLate();
 
         getDataBD();
 
-        getCountSimTXT();
-
         createListView();
+
     }
 
     private void initAll(){
         dbHelper = new DBHelper(this);
-        money = findViewById(R.id.money);
-        textViewSumSim = findViewById(R.id.textView_sumSim);
-        buttonNorm = findViewById(R.id.button_norm);
         listView = findViewById(R.id.listView);
+
+        buttonAddSim = findViewById(R.id.button_norm);
+        buttonStayed = findViewById(R.id.button_stayed);
+        buttonLate = findViewById(R.id.button_late);
+
+        tvHours = findViewById(R.id.int_hours);
+        tvMoney = findViewById(R.id.money);
+        tvSumSim = findViewById(R.id.textView_sumSim);
 
         checkboxState = new boolean[27];
 
         adapter = new ArrayAdapter<>(this, R.layout.design_list, R.id.number_Sim, arrayListSim);
+        tvHours.setText(HoursArray.getTodayHours(MainActivity.this));
+    }
 
 
+    private void listnerStayed(){
+        buttonStayed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvHours.setText(HoursClass.addHours(tvHours.getText().toString()));
+                tvMoney.setText(MoneyCount.Companion.moneyCountHours
+                        (tvHours.getText().toString()));
+                HoursArray.changeHoursArray(tvHours.getText().toString() + "-" + variableData.getDateText(),
+                        MainActivity.this);
+
+            }
+        });
+    }
+
+    private void listnerLate(){
+        buttonLate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvHours.setText(HoursClass.subtractHours(tvHours.getText().toString()));
+                tvMoney.setText(MoneyCount.Companion.moneyCountHours
+                        (tvHours.getText().toString()));
+                HoursArray.changeHoursArray(tvHours.getText().toString() + " " + variableData.getDateText(),
+                        MainActivity.this);
+            }
+        });
     }
 
     private void createListView() {
         listView.setAdapter(adapter);
+
+        tvSumSim.setText(String.valueOf(arrayListSim.size()));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -296,28 +327,14 @@ public class MainActivity extends AppCompatActivity {
 
         boolean indexData = removeString.contains(variableData.getDateText());
         if (indexData) {
-            intTextViewNorm--;
-            intTextViewSumSim = intTextViewNorm;
-            moneyCount.moneyCount(intTextViewSumSim,true);
-            money.setText(String.valueOf(moneyCount.moneyCount(intTextViewSumSim,true)));
-            textViewSumSim.setText(String.valueOf(intTextViewSumSim));
             dbHelper.deleteOne(removeString);
             arrayListSim.remove(i);
             arrayListSimFull.remove(i);
 
-            saveCountSimTXT();
+            tvSumSim.setText(String.valueOf(arrayListSim.size()));
         }
     }
 
-    private void setAllCountSim(@NonNull TextView btn) {
-
-        intTextViewNorm++;
-        intTextViewSumSim = intTextViewNorm;
-        moneyCount.moneyCount(intTextViewSumSim,true);
-        money.setText(String.valueOf(moneyCount.moneyCount(intTextViewSumSim,true)));
-        textViewSumSim.setText(String.valueOf(intTextViewSumSim));
-        saveCountSimTXT();
-    }
 
     private void saveDataBD(String numberSim, String strBtn) {
 
@@ -349,62 +366,20 @@ public class MainActivity extends AppCompatActivity {
             Collections.addAll(arrayListSimFull, arrFull);
             Collections.reverse(arrayListSimFull);
 
+
+            tvSumSim.setText(String.valueOf(arrayListSim.size()));
+
             createListView();
+
+            tvMoney.setText(MoneyCount.Companion.moneyCountHours
+                    (tvHours.getText().toString()));
         }
     }
 
-    private void saveCountSimTXT() {
-        String allCountForTxt = (intTextViewEasy + " " + intTextViewNorm + " " + intTextViewHard + " " + variableData.getDateText());
-
-        try {
-            FileOutputStream fileOutput = openFileOutput("countSim.txt", MODE_PRIVATE);
-            fileOutput.write((allCountForTxt).getBytes());
-            fileOutput.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void getCountSimTXT() {
-        try {
-            FileOutputStream fileOutput = openFileOutput("countSim.txt", MODE_APPEND);
-            fileOutput.close();
-            FileInputStream fileInput = openFileInput("countSim.txt");
-            InputStreamReader reader = new InputStreamReader(fileInput);
-            BufferedReader bufferedReader = new BufferedReader(reader);
-
-            StringBuilder stringBuilder = new StringBuilder();
-            String lines;
-            while ((lines = bufferedReader.readLine()) != null) {
-                stringBuilder.append(lines).append(" ");
-            }
-            String string = stringBuilder.toString();
-            if (string.isEmpty()) {
-
-            } else {
-                String[] arr = string.split(" ");
-                if (arr[3].equals(variableData.getDateText())) {
-                    intTextViewEasy = Integer.parseInt(arr[0]);
-                    intTextViewNorm = Integer.parseInt(arr[1]);
-                    intTextViewHard = Integer.parseInt(arr[2]);
-                    intTextViewSumSim = intTextViewEasy + intTextViewNorm + intTextViewHard;
-                    moneyCount.moneyCount(intTextViewSumSim,true);
-                    textViewSumSim.setText(String.valueOf(intTextViewSumSim));
-
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        moneyCount.moneyCount(intTextViewSumSim,true);
-        money.setText(String.valueOf(moneyCount.moneyCount(intTextViewSumSim,true)));
-    }
-
-    private void setNumberSimInArrayListSim(String numberSim, TextView btn) {
+    private void setNumberSimInArrayListSim(String numberSim) {
         numberSim = ClearNumberSim.clear(numberSim);
         String strBtn = stringCheckBoxState();
 
-        setAllCountSim(btn);
         arrayListSimFull.add(0, numberSim + " " + strBtn + " " + variableData.getDateText());
         arrayListSim.add(0, numberSim + " " + variableData.getDateText());
         createListView();
@@ -412,30 +387,27 @@ public class MainActivity extends AppCompatActivity {
         saveDataBD(numberSim, strBtn);
     }
 
-    private void prefireTouchListener(TextView z) {
-        touchListener((View) z);
-    }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void touchListener(View v) {
+    private void listnerAddSim(View v) {
         TextView b = (TextView) v;
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                customDialog(b);
+                customDialog();
             }
         });
         b.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                clickScanner(b);
+                clickScanner();
                 return false;
             }
         });
     }
 
 
-    private void customDialog(TextView btn) {
+    private void customDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.dialog_scooter_number_main, null);
@@ -473,7 +445,7 @@ public class MainActivity extends AppCompatActivity {
         positiveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String numberSim = editTextUserNumber.getText().toString();
-                setNumberSimInArrayListSim(numberSim, btn);
+                setNumberSimInArrayListSim(numberSim);
                 alertDialog.dismiss();
             }
         });
@@ -500,13 +472,12 @@ public class MainActivity extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
-    private void clickScanner(TextView b) {
+    private void clickScanner() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(MainActivity.this);
         intentIntegrator.setOrientationLocked(true);
         intentIntegrator.setPrompt("Scan a QR code");
         intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         intentIntegrator.initiateScan();
-        allButtonsForMethod = b;
     }
 
     //результат сканирования QR
@@ -527,7 +498,7 @@ public class MainActivity extends AppCompatActivity {
                 contents = contents.replaceAll(":", "");
                 contents = contents.replaceAll("\\\\", "");
                 contents = contents.replaceAll("BIKE/\\?", "");
-                setNumberSimInArrayListSim(contents, allButtonsForMethod);
+                setNumberSimInArrayListSim(contents);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

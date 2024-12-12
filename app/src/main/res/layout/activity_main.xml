@@ -55,17 +55,18 @@
 
     <TextView
         android:id="@+id/textView_sumSim"
-        android:layout_width="182dp"
-        android:layout_height="98dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/dialog_holo_light_frame"
         android:fontFamily="@font/audiowide"
+        android:text="0"
         android:textAlignment="center"
         android:textColor="@color/whooshColor4_grey"
-        android:textSize="96sp"
+        android:textSize="60sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/text_count_sim"
         tools:text="51" />
 
     <ListView
@@ -86,15 +87,112 @@
         android:id="@+id/money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?android:attr/galleryItemBackground"
+        android:layout_marginTop="43dp"
+        android:background="@android:drawable/dialog_holo_dark_frame"
         android:fontFamily="@font/audiowide"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:textAlignment="center"
         android:textColor="@color/whooshColor2_white"
         android:textSize="48sp"
-        app:layout_constraintBottom_toTopOf="@+id/listView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/hours_layout"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:text="2245" />
+
+    <LinearLayout
+        android:id="@+id/hours_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/textView_sumSim"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/text_hours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_default_small"
+            android:fontFamily="@font/audiowide"
+            android:paddingStart="60dp"
+            android:paddingEnd="60dp"
+            android:text="Hours"
+            android:textAlignment="center"
+            android:textColor="@color/whooshColor4_grey"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/int_hours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:fontFamily="@font/audiowide"
+            android:text="9:00"
+            android:textAlignment="center"
+            android:textColor="@color/whooshColor4_grey"
+            android:textSize="48sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_count_sim"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@android:drawable/btn_default_small"
+        android:fontFamily="@font/audiowide"
+        android:lineSpacingExtra="20sp"
+        android:text="Count sim"
+        android:textAlignment="center"
+        android:textColor="@color/whooshColor4_grey"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="198dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="1dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/money"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hours_layout">
+
+        <TextView
+            android:id="@+id/button_late"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/material_drawer_badge"
+            android:backgroundTint="@color/whooshColor3_red"
+            android:fontFamily="@font/tektur_semibold"
+            android:text="-15мин\nОпоздал"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/button_stayed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/material_drawer_badge"
+            android:backgroundTint="@color/whooshColor1_orange"
+            android:fontFamily="@font/tektur_semibold"
+            android:text="+15мин\nЗадержался"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
