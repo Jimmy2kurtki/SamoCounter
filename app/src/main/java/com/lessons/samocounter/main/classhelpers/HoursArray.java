@@ -19,23 +19,29 @@ public class HoursArray {
             changeLastElement(newHoursElement);
         } else {
             if(hoursArray == null){
-                hoursArray = newHoursElement + "_";
+                hoursArray = newHoursElement;
             }else {
-                hoursArray = hoursArray + newHoursElement + "_";
+                hoursArray = hoursArray + "_" + newHoursElement;
             }
         }
         globalDataHolder.saveData(KEY_HOURS, hoursArray);
     }
 
-    public static String getTodayHours(Context context){
+    public static String getTodayHours(Context context) {
         GlobalDataHolder globalDataHolder = new GlobalDataHolder(context);
-        hoursArray = globalDataHolder.getSavedData(KEY_HOURS);
-        if (hoursArray != null && hoursArray.contains(variableData.getDateText())){
+        String hoursArray = globalDataHolder.getSavedData(KEY_HOURS);
+
+        if (hoursArray != null && hoursArray.contains(variableData.getDateText())) {
             String[] ar = hoursArray.split("_");
 
-            String lastElement = ar[ar.length - 2];
+            String lastElement = ar[ar.length - 1];
             String[] arLastElement = lastElement.split("-");
-            return arLastElement[0];
+
+            if (arLastElement.length > 0) {
+                return arLastElement[0];
+            } else {
+                return "9:00";
+            }
         } else {
             return "9:00";
         }
@@ -45,8 +51,12 @@ public class HoursArray {
         String[] ar = hoursArray.split("_");
         ar[ar.length-1] = newHoursElement;
         StringBuilder stringBuilder = new StringBuilder();
-        for (String string : ar) {
-            stringBuilder.append(string).append("_");
+        for (int i = 0; i < ar.length; i++) {
+            if(i == ar.length-1){
+                stringBuilder.append(ar[i]);
+            } else {
+                stringBuilder.append(ar[i]).append("_");
+            }
         }
         hoursArray = String.valueOf(stringBuilder);
     }

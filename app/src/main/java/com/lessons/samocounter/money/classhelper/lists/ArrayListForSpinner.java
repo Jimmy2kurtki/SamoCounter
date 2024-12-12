@@ -11,9 +11,11 @@ public class ArrayListForSpinner {
             return arrayListForSpinnerStart;
         }
 
-        public static void addData(String addString){
+        public  void addData(String addString){
             String[] ari = addString.split("-");
-            arrayListForSpinnerStart.add(ari[1]);
+            if(ari.length > 1) {
+                arrayListForSpinnerStart.add(ari[1]);
+            }
         }
     }
 

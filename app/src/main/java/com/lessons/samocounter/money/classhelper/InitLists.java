@@ -15,11 +15,13 @@ public class InitLists {
             String[] ar = globalDataHolder.getSavedData(KEY_HOURS).split("_");
             for (String string : ar) {
                 String string0 = new String(string);
-                ArrayListForSpinner.Start.addData(string0);
+                ArrayListForSpinner.Start start = new ArrayListForSpinner.Start();
+                start.addData(string0);
+
                 String string1 = new String(string);
-                ArrayListForTv.addData(string1);
+                ArrayListForTv arrayListForTv = new ArrayListForTv();
+                arrayListForTv.addData(string1);
             }
-            ArrayListForSpinner.Finish.copyAndReverse(ArrayListForSpinner.Start.getArray());
         }
     }
 }

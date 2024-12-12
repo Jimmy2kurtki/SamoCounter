@@ -58,6 +58,7 @@ public class MoneyActivity extends AppCompatActivity {
 
 
     private void initSp() {
+
         ArrayAdapter<String> adapterSpinnerSimStart = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, ArrayListForSpinner.Start.getArray());
         adapterSpinnerSimStart.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

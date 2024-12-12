@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 tvHours.setText(HoursClass.subtractHours(tvHours.getText().toString()));
                 tvMoney.setText(MoneyCount.Companion.moneyCountHours
                         (tvHours.getText().toString()));
-                HoursArray.changeHoursArray(tvHours.getText().toString() + " " + variableData.getDateText(),
+                HoursArray.changeHoursArray(tvHours.getText().toString() + "-" + variableData.getDateText(),
                         MainActivity.this);
             }
         });
